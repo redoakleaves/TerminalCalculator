@@ -1,4 +1,8 @@
+#if defined(_WIN64)
+#include <curses.h>
+#else
 #include <ncurses.h>
+#endif
 
 #include "config.h"
 #include "tools/color.h"

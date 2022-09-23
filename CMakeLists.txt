@@ -6,8 +6,12 @@ configure_file(src/config.h.in config.h)
 add_executable(TerminalCalculator src/main.cpp)
 set_property(TARGET TerminalCalculator PROPERTY CXX_STANDARD 11)
 
-find_package(Curses REQUIRED)
-target_link_libraries(TerminalCalculator ${CURSES_LIBRARY})
+add_subdirectory(vendor)
+
+if (UNIX)
+    find_package(Curses REQUIRED)
+    target_link_libraries(TerminalCalculator ${CURSES_LIBRARY})
+endif (UNIX)
 include_directories(${CURSES_INCLUDE_DIR})
 
 include_directories(src)
