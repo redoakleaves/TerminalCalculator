@@ -34,9 +34,13 @@ int handle_input(Entry* entry, int input) {
         case -1:
             return NO_REDRAW;
 
-        case 3: // SIGINT
+        // SIGINT
+        case 3:
             return EXIT;
-        case 10: // Enter
+
+        // Enter
+        case 10:
+        case 13:
             if (!entry->raw_content.empty())
                 return 0;
             return NO_REDRAW;
@@ -73,7 +77,10 @@ int handle_input(Entry* entry, int input) {
             }
             break;
 
-        case 127: // Backspace
+        // Backspace
+        case 8:
+        case 127:
+        case KEY_BACKSPACE:
             if (entry->raw_content.length() > 0) {
                 if (globalstate.current != globalstate.latest) {
                     globalstate.latest->raw_content = globalstate.current->raw_content;
