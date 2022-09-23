@@ -84,6 +84,17 @@ int handle_input(Entry* entry, int input) {
             }
             break;
 
+        // Delete
+        case KEY_DC:
+            if (entry->raw_content.length() > 0) {
+                if (globalstate.current != globalstate.latest) {
+                    globalstate.latest->raw_content = globalstate.current->raw_content;
+                    entry = globalstate.current = globalstate.latest;
+                }
+                entry->raw_content.erase(globalstate.cursor_x - prefix_length(), 1);
+            }
+            break;
+
         default:
             if (globalstate.current != globalstate.latest) {
                 globalstate.latest->raw_content = globalstate.current->raw_content;
