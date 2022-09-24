@@ -7,8 +7,10 @@
 #include <ncurses.h>
 #endif
 
+#include "config.h"
+
 #define COLOR_RESULT 1
 
-void init_color_defs();
+void init_color_defs(Config& config);
 
 #endif

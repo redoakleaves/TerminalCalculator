@@ -1,17 +1,21 @@
 cmake_minimum_required(VERSION 3.23)
 
 project(TerminalCalculator VERSION 0.0.0.1)
-configure_file(src/config.h.in config.h)
+configure_file(src/tools/config.h.in config.h)
 
 add_executable(TerminalCalculator src/main.cpp)
 set_property(TARGET TerminalCalculator PROPERTY CXX_STANDARD 11)
 
 add_subdirectory(vendor)
 
+target_link_libraries(TerminalCalculator yaml-cpp)
 if (UNIX)
     find_package(Curses REQUIRED)
     target_link_libraries(TerminalCalculator ${CURSES_LIBRARY})
 endif (UNIX)
+if (WIN32)
+    target_link_libraries(TerminalCalculator PDCurses)
+endif (WIN32)
 include_directories(${CURSES_INCLUDE_DIR})
 
 include_directories(src)
@@ -22,6 +26,7 @@ target_sources(TerminalCalculator
         src/entry.cpp
         src/state.cpp
         src/tools/color.cpp
+        src/tools/config.cpp
         src/parser/parser.cpp
         src/parser/algebra.cpp
         src/parser/vars.cpp

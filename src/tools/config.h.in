@@ -1,0 +1,23 @@
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+#include <string>
+#include <map>
+
+#include "yaml-cpp/yaml.h"
+
+#define PROJECT_VER  "@PROJECT_VERSION@"
+
+class Config {
+public:
+    void load_config();
+
+    std::string get_value(const char* key);
+
+private:
+    std::map<std::string, std::string> config_store;
+
+    void parse_recursive(std::string prefix, YAML::Node child);
+};
+
+#endif

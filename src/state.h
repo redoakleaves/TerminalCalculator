@@ -3,8 +3,7 @@
 
 #include "entry.h"
 
-class State
-{
+class State {
 public:
     Entry* history;
     Entry* current;

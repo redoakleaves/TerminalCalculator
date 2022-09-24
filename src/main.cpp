@@ -5,15 +5,16 @@
 #endif
 
 #include "config.h"
+#include "state.h"
 #include "tools/color.h"
 
-#include "state.h"
 #include "parser/parser.h"
 
 #define EXIT -1
 #define REDRAW 1
 #define NO_REDRAW 2
 
+static Config globalconfig;
 static State globalstate;
 
 int prefix_length() {
@@ -118,13 +119,17 @@ int handle_input(Entry* entry, int input) {
 }
 
 int main(int argc, char* argv[]) {
+    // Load config if existent
+    globalconfig.load_config();
+
+    // Init curses
     initscr();
     keypad(stdscr, TRUE);
     noecho();
     raw();
     
     // Init colors
-    init_color_defs();
+    init_color_defs(globalconfig);
 
     getmaxyx(stdscr, globalstate.max_y, globalstate.max_x);
 

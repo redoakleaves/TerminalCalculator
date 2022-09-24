@@ -1,3 +1,6 @@
 [submodule "vendor/PDCurses"]
 	path = vendor/PDCurses
 	url = https://github.com/wmcbrine/PDCurses.git
+[submodule "vendor/yaml-cpp"]
+	path = vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git

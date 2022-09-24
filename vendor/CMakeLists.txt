@@ -10,5 +10,7 @@ if (WIN32)
     )
 
     set(CURSES_INCLUDE_DIR PDCurses)
-    target_link_libraries(TerminalCalculator PDCurses)
 endif (WIN32)
+
+# yaml-cpp
+add_subdirectory(yaml-cpp)
