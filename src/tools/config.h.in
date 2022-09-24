@@ -10,11 +10,16 @@
 
 class Config {
 public:
+    Config();
+    ~Config();
+
     void load_config();
 
     std::string get_value(const char* key);
 
 private:
+    char* home_path;
+
     std::map<std::string, std::string> config_store;
 
     void parse_recursive(std::string prefix, YAML::Node child);
