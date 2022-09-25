@@ -16,6 +16,10 @@ static std::map<std::string, double> const_store = {
 };
 
 int parse_var_def(Entry& entry, std::string& substring, int final) {
+    // Detect multiple equal signs
+    if (substring.find('=') != substring.rfind('='))
+        return 0;
+
     std::smatch match;
     if (std::regex_match(substring, match, var_def_expression) && !const_store.count(match[1].str())) {
         if (!final)
