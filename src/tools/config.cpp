@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <cstring>
 
 #include "config.h"
 
