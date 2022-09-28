@@ -2,17 +2,14 @@
 
 #include "parser.h"
 #include "algebra.h"
+#include "func.h"
 #include "vars.h"
 
 static const std::regex subexpression("\\((?=[^(])[\\w\\*\\/\\+\\-]+\\)");
 
 int parse_substring(Entry& entry, std::string& substring) {
     parse_algebra(entry, substring);
-
-    if (substring.find('=') != std::string::npos)
-        return parse_var_def(entry, substring);
-    else
-        return std::regex_match(substring, std::regex("[-]?\\d+[\\.\\,]?(?:\\d+)?"));
+    return std::regex_match(substring, std::regex("[-]?\\d+[\\.\\,]?(?:\\d+)?"));
 }
 
 void parse(Entry& entry, int final) {
@@ -22,9 +19,15 @@ void parse(Entry& entry, int final) {
     std::string working_copy = entry.raw_content;
     working_copy.erase(std::remove_if(working_copy.begin(), working_copy.end(), ::isspace), working_copy.end());
 
-    // Resolve vars
-    if (working_copy.find('=') == std::string::npos)
+    // Resolve functions and vars
+    if (working_copy.find('=') != std::string::npos) {
+        if (!parse_func_def(entry, working_copy, final)) {
+            parse_var_def(entry, working_copy, final);
+        }
+    } else {
+        parse_func_usage(entry, working_copy);
         parse_var_usage(entry, working_copy);
+    }
 
     // Search for subexpressions
     std::smatch match;
@@ -35,11 +38,8 @@ void parse(Entry& entry, int final) {
     }
 
     // Parse remaining string
-    int valid = parse_substring(entry, working_copy);
-    if (valid) {
+    if (parse_substring(entry, working_copy)) {
         entry.set_result(working_copy);
-        if (final)
-            parse_var_def(entry, working_copy, 1);
     } else {
         std::string result_empty = std::string("");
         entry.set_result(result_empty);

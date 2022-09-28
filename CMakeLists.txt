@@ -30,4 +30,5 @@ target_sources(TerminalCalculator
         src/parser/parser.cpp
         src/parser/algebra.cpp
         src/parser/vars.cpp
+        src/parser/func.cpp
 )

@@ -3,8 +3,6 @@
 
 #include "entry.h"
 
-void register_var();
-
 int parse_var_def(Entry& entry, std::string& substring, int final = 0);
 void parse_var_usage(Entry& entry, std::string& substring);
 
