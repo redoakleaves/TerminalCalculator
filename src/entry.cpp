@@ -2,7 +2,7 @@
 
 #include "entry.h"
 
-uint32_t current_identifier = 1;
+static uint32_t current_identifier = 1;
 
 Entry::Entry() {
     identifier = current_identifier++;
@@ -22,8 +22,29 @@ void Entry::set_result(std::string& result) {
     this->result = result;
 }
 void Entry::print_stylized() {
-    printw("%s", stylized_content.c_str());
+    std::stringstream stream(stylized_content);
+    std::string token;
 
+    int color = -1;
+    char temp;
+    while (std::getline(stream, token, '{')) {
+        printw("%s", token.c_str());
+
+        if (color >= 0)
+            attroff(COLOR_PAIR(color));
+
+        if (!stream.eof()) {
+            if (stream.peek() != '}') {
+                stream >> color;
+                attron(COLOR_PAIR(color));
+            }
+            stream >> temp;
+        }
+    }
+
+    print_result();
+}
+void Entry::print_result() {
     if (!result.empty()) {
         printw(" = ");
         attron(COLOR_PAIR(COLOR_RESULT));

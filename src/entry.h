@@ -3,8 +3,6 @@
 
 #include <string>
 
-extern uint32_t current_identifier;
-
 class Entry {
 public:
     uint32_t identifier;
@@ -20,6 +18,7 @@ public:
     void set_stylized(std::string& stylized);
     void set_result(std::string& result);
     void print_stylized();
+    void print_result();
 
 private:
     std::string stylized_content;
