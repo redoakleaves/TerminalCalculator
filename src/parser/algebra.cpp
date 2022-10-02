@@ -35,6 +35,7 @@ void parse_algebra(Entry& entry, std::string& substring) {
     for (int i = 0; i < 3; i++) {
         while (std::regex_search(substring, match, operations[i])) {
             std::string first_string = match[1].str();
+            std::string operator_string = match[2].str();
             std::string second_string = match[3].str();
 
             if (first_string.length() > 2 && first_string.at(1) == '-')
@@ -56,14 +57,14 @@ void parse_algebra(Entry& entry, std::string& substring) {
                 break;
 
             case 1:
-                if (match[2].str().compare("*") == 0)
+                if (operator_string.compare("*") == 0)
                     result *= temp_number;
                 else
                     result /= temp_number;
                 break;
 
             case 2:
-                if (match[2].str().compare("+") == 0)
+                if (operator_string.compare("+") == 0)
                     result += temp_number;
                 else
                     result -= temp_number;
