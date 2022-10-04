@@ -10,6 +10,7 @@
 #include "config.h"
 
 #define COLOR_RESULT 1
+#define COLOR_COMMAND 2
 
 void init_color_defs(Config& config);
 

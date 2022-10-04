@@ -9,6 +9,7 @@
 #include "tools/color.h"
 
 #include "parser/parser.h"
+#include "parser/commands.h"
 
 #define EXIT -1
 #define REDRAW 1
@@ -139,14 +140,15 @@ int main(int argc, char* argv[]) {
     move(0, 0);
     printw("Terminal Calculator %s\n", PROJECT_VER);
 
-    int result = REDRAW;
+    int result_input = REDRAW;
+    int result_parse = -1;
     getyx(stdscr, globalstate.cursor_y, globalstate.cursor_x);
     while (1) {
         globalstate.cursor_x += prefix_length();
 
         do {
-            if (result == REDRAW) {
-                parse(*globalstate.current);
+            if (result_input == REDRAW) {
+                result_parse = parse(*globalstate.current);
 
                 move(globalstate.cursor_y, 0);
                 clrtoeol();
@@ -157,10 +159,10 @@ int main(int argc, char* argv[]) {
             move(globalstate.cursor_y, globalstate.cursor_x);
             refresh();
 
-            result = handle_input(globalstate.current, getch());
-        } while (result > 0);
+            result_input = handle_input(globalstate.current, getch());
+        } while (result_input > 0);
 
-        if (result == EXIT)
+        if (result_parse == Commands::Exit || result_input == EXIT)
             break;
 
         // Final parse for var definitions etc.
@@ -168,7 +170,7 @@ int main(int argc, char* argv[]) {
 
         globalstate.cursor_y++;
         globalstate.cursor_x = 0;
-        result = REDRAW;
+        result_input = REDRAW;
 
         // Create new entry in history
         globalstate.create_new_entry();

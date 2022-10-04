@@ -28,6 +28,7 @@ target_sources(TerminalCalculator
         src/tools/color.cpp
         src/tools/config.cpp
         src/parser/parser.cpp
+        src/parser/commands.cpp
         src/parser/algebra.cpp
         src/parser/vars.cpp
         src/parser/func.cpp

@@ -3,6 +3,6 @@
 
 #include "entry.h"
 
-void parse(Entry& entry, int final = 0);
+int parse(Entry& entry, int final = 0);
 
 #endif

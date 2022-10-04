@@ -1,6 +1,7 @@
 #include <regex>
 
 #include "parser.h"
+#include "commands.h"
 #include "algebra.h"
 #include "func.h"
 #include "vars.h"
@@ -12,12 +13,17 @@ int parse_substring(Entry& entry, std::string& substring) {
     return std::regex_match(substring, std::regex("[-]?\\d+[\\.\\,]?(?:\\d+)?"));
 }
 
-void parse(Entry& entry, int final) {
+int parse(Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
 
     // Create working copy of input and remove spaces
     std::string working_copy = entry.raw_content;
     working_copy.erase(std::remove_if(working_copy.begin(), working_copy.end(), ::isspace), working_copy.end());
+
+    // Check for commands
+    int command = parse_commands(entry, working_copy);
+    if (command)
+        return command;
 
     // Resolve functions and vars
     if (working_copy.find('=') != std::string::npos) {
@@ -44,4 +50,6 @@ void parse(Entry& entry, int final) {
         std::string result_empty = std::string("");
         entry.set_result(result_empty);
     }
+
+    return 0;
 }
