@@ -25,8 +25,7 @@ Config::Config() {
 
     size_t home_path_size = strlen(homedrive) + strlen(homepath) + 1;
     home_path = (char*) malloc(home_path_size);
-    if (home_path)
-    {
+    if (home_path) {
         strcpy_s(home_path, home_path_size, homedrive);
         strcat_s(home_path, home_path_size, homepath);
     }
@@ -60,8 +59,7 @@ void Config::load_config() {
         char* complete_path_temp = complete_path;
         complete_path_size = strlen(home_path) + strlen(paths[1]) + 1;
         complete_path = (char*) realloc(complete_path_temp, complete_path_size);
-        if (!complete_path)
-        {
+        if (!complete_path) {
             free(complete_path_temp);
             return;
         }
@@ -74,7 +72,7 @@ void Config::load_config() {
         strcat(complete_path, paths[1]);
 #endif
 
-        if (stat(complete_path, &buffer)){
+        if (stat(complete_path, &buffer)) {
             free(complete_path);
             return;
         }
