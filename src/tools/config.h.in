@@ -6,7 +6,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#define PROJECT_VER  "@PROJECT_VERSION@"
+#define PROJECT_VER "@PROJECT_VERSION@"
 
 class Config {
 public:

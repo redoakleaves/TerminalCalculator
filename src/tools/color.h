@@ -1,7 +1,7 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
-#if defined(_WIN64)
+#if defined(_WIN32)
 #include <curses.h>
 #else
 #include <ncurses.h>
