@@ -19,7 +19,7 @@ endif (WIN32)
 include_directories(${CURSES_INCLUDE_DIR})
 
 include_directories(src)
-include_directories(build)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 target_sources(TerminalCalculator
     PUBLIC
