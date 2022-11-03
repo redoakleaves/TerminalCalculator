@@ -20,7 +20,7 @@ static State globalstate;
 
 int prefix_length() {
     char buffer[10];
-    return sprintf(buffer, "%u", globalstate.latest->identifier) + 2;
+    return snprintf(buffer, 10, "%u", globalstate.latest->identifier) + 2;
 }
 void print_prefix() {
     printw("%u: ", globalstate.latest->identifier);
