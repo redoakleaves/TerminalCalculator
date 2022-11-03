@@ -1,4 +1,5 @@
 #include <sstream>
+#include <string>
 #include <regex>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -7,7 +8,7 @@
 #include "vars.h"
 
 static const std::regex var_def_expression("^([a-zA-Z]+)=(-?\\d+(?:[\\.\\,]\\d+)?)$");
-static const std::regex var_usage_expression("[a-zA-Z]+");
+static const std::regex var_usage_expression("([a-zA-Z]+)(?=[^\\(a-zA-Z]|$)");
 
 static std::map<std::string, double> var_store;
 static std::map<std::string, double> const_store = {
@@ -21,17 +22,11 @@ int parse_var_def(Entry& entry, std::string& substring, int final) {
         return 0;
 
     std::smatch match;
-    if (std::regex_match(substring, match, var_def_expression) && !const_store.count(match[1].str())) {
+    if (std::regex_match(substring, match, var_def_expression)) {
         if (!final)
             return 1;
 
-        std::stringstream stream;
-        stream.str(match[2].str());
-
-        double value;
-        stream >> value;
-
-        var_store.insert(std::pair<std::string, double>(match[1].str(), value));
+        var_store[match[1].str()] = std::stod(match[2].str());
 
         return 1;
     }
