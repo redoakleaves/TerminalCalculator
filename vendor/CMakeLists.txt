@@ -12,5 +12,8 @@ if (WIN32)
     set(CURSES_INCLUDE_DIR PDCurses)
 endif (WIN32)
 
+# re2
+add_subdirectory(re2)
+
 # yaml-cpp
 add_subdirectory(yaml-cpp)

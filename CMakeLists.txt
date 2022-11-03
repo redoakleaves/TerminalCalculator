@@ -8,6 +8,7 @@ set_property(TARGET TerminalCalculator PROPERTY CXX_STANDARD 11)
 
 add_subdirectory(vendor)
 
+target_link_libraries(TerminalCalculator re2)
 target_link_libraries(TerminalCalculator yaml-cpp)
 if (UNIX)
     find_package(Curses REQUIRED)
