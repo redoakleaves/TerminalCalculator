@@ -5,9 +5,11 @@
 #include <math.h>
 #include <map>
 
+#include <re2/re2.h>
+
 #include "vars.h"
 
-static const std::regex var_def_expression("^([a-zA-Z]+)=(-?\\d+(?:[\\.\\,]\\d+)?)$");
+static const re2::RE2 var_def_expression("^([a-zA-Z]+)=(-?\\d+(?:[\\.\\,]\\d+)?)$");
 static const std::regex var_usage_expression("([a-zA-Z]+)(?=[^\\(a-zA-Z]|$)");
 
 static std::map<std::string, double> var_store;
@@ -21,12 +23,13 @@ int parse_var_def(Entry& entry, std::string& substring, int final) {
     if (substring.find('=') != substring.rfind('='))
         return 0;
 
-    std::smatch match;
-    if (std::regex_match(substring, match, var_def_expression)) {
+    std::string var_name;
+    double var_definition;
+    if (re2::RE2::FullMatch(substring, var_def_expression, &var_name, &var_definition)) {
         if (!final)
             return 1;
 
-        var_store[match[1].str()] = std::stod(match[2].str());
+        var_store[var_name] = var_definition;
 
         return 1;
     }
