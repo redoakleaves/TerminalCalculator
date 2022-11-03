@@ -13,6 +13,7 @@ if (WIN32)
 endif (WIN32)
 
 # re2
+option(RE2_BUILD_TESTING "" OFF)
 add_subdirectory(re2)
 
 # yaml-cpp
