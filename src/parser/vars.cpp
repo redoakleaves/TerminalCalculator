@@ -1,6 +1,4 @@
-#include <sstream>
 #include <string>
-#include <regex>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <map>
@@ -10,7 +8,7 @@
 #include "vars.h"
 
 static const re2::RE2 var_def_expression("^([a-zA-Z]+)=(-?\\d+(?:[\\.\\,]\\d+)?)$");
-static const std::regex var_usage_expression("([a-zA-Z]+)(?=[^\\(a-zA-Z]|$)");
+static const re2::RE2 var_usage_expression("([a-zA-Z]+)(?:[^\\(a-zA-Z]|$)");
 
 static std::map<std::string, double> var_store;
 static std::map<std::string, double> const_store = {
@@ -38,21 +36,14 @@ int parse_var_def(Entry& entry, std::string& substring, int final) {
 }
 
 void parse_var_usage(Entry& entry, std::string& substring) {
-    int delta = 0;
-    std::string substring_copy = substring;
-
-    std::sregex_iterator var_iterator(substring_copy.begin(), substring_copy.end(), var_usage_expression);
-    std::sregex_iterator end = std::sregex_iterator();
-    for (std::sregex_iterator current = var_iterator; current != end; ++current) {
-        std::smatch match = *current;
-        std::string match_string = match.str();
-
-        std::map<std::string, double>& var_source = const_store.count(match_string) ? const_store : var_store;
-        if (var_source.count(match_string)) {
-            std::stringstream stream;
-            stream << var_source.at(match_string);
-            substring.replace(match.position() + delta, match_string.length(), stream.str());
-            delta += stream.str().length() - match_string.length();
+    re2::StringPiece match;
+    while (re2::RE2::PartialMatch(substring, var_usage_expression, &match)) {
+        std::string var_name = match.ToString();
+        std::map<std::string, double>& var_source = const_store.count(var_name) ? const_store : var_store;
+        if (var_source.count(var_name)) {
+            substring.replace(match.data() - substring.data(), var_name.length(), std::to_string(var_source.at(var_name)));
+        } else {
+            break;
         }
     }
 }
