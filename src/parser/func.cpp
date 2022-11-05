@@ -10,7 +10,7 @@
 #include "func.h"
 
 static const re2::RE2 func_def_expression("^([a-zA-Z]+)\\(([a-zA-Z]+(?:;[a-zA-Z]+)*)\\)=(.+)$");
-static const re2::RE2 func_usage_expression("([a-zA-Z]+)\\(([a-zA-Z]+|(?:-?\\d+(?:[\\.\\,]\\d+)?)(?:;(?:[a-zA-Z]+|(?:-?\\d+(?:[\\.\\,]\\d+)?)))*)\\)");
+static const re2::RE2 func_usage_expression("([a-zA-Z]+)\\(((?:[a-zA-Z]+|(?:-?\\d+(?:[\\.\\,]\\d+)?))(?:;(?:[a-zA-Z]+|(?:-?\\d+(?:[\\.\\,]\\d+)?)))*)\\)");
 static const re2::RE2 param_usage_expression("([a-zA-Z]+)(?:[^\\(a-zA-Z]|$)");
 
 static const re2::RE2 const_func_usage_expression("([a-zA-Z]+)\\(((?:-?\\d+(?:[\\.\\,]\\d+)?)(?:;(?:-?\\d+(?:[\\.\\,]\\d+)?))*)\\)");
