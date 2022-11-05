@@ -3,6 +3,7 @@
 
 #include <re2/re2.h>
 
+#include "tools/entry.h"
 #include "parser.h"
 #include "commands.h"
 #include "algebra.h"
@@ -12,7 +13,7 @@
 static const re2::RE2 sub_expression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*\\/+-]+)\\)");
 static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
-int parse(Entry& entry, int final) {
+int parse(Tools::Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
 
     // Create working copy of input and remove spaces

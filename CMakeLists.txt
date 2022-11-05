@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 
 project(TerminalCalculator VERSION 0.0.0.1)
-configure_file(src/tools/config.h.in config.h)
+configure_file(src/tools/config.h.in tools/config.h)
 
 add_executable(TerminalCalculator src/main.cpp)
 set_property(TARGET TerminalCalculator PROPERTY CXX_STANDARD 11)
@@ -24,10 +24,11 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 target_sources(TerminalCalculator
     PUBLIC
-        src/entry.cpp
-        src/state.cpp
         src/tools/color.cpp
         src/tools/config.cpp
+        src/tools/entry.cpp
+        src/tools/state.cpp
+
         src/parser/parser.cpp
         src/parser/commands.cpp
         src/parser/algebra.cpp

@@ -1,8 +1,8 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
 
-#include "entry.h"
+#include "tools/entry.h"
 
-int parse(Entry& entry, int final = 0);
+int parse(Tools::Entry& entry, int final = 0);
 
 #endif

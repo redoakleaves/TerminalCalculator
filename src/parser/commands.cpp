@@ -5,11 +5,12 @@
 #include <re2/re2.h>
 
 #include "tools/color.h"
+#include "tools/entry.h"
 #include "commands.h"
 
 static const re2::RE2 command_expression("^:([a-zA-Z]+)$");
 
-int parse_commands(Entry& entry, std::string& substring) {
+int parse_commands(Tools::Entry& entry, std::string& substring) {
     std::string command;
     if (re2::RE2::FullMatch(substring, command_expression, &command)) {
         std::string command_copy = command;

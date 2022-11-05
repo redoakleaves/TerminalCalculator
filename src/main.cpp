@@ -7,9 +7,11 @@
 #include <ncurses.h>
 #endif
 
-#include "config.h"
-#include "state.h"
+#include "global.h"
+
 #include "tools/color.h"
+#include "tools/config.h"
+#include "tools/state.h"
 
 #include "parser/parser.h"
 #include "parser/commands.h"
@@ -18,8 +20,8 @@
 #define REDRAW 1
 #define NO_REDRAW 2
 
-static Config globalconfig;
-static State globalstate;
+Tools::Config globalconfig;
+Tools::State globalstate;
 
 int prefix_length() {
     char buffer[10];
@@ -34,7 +36,7 @@ void print_footer() {
     printw("UpArrow: Up in history DownArrow: Down in history");
 }
 
-int handle_input(Entry* entry, int input) {
+int handle_input(Tools::Entry* entry, int input) {
     switch (input) {
         case -1:
             return NO_REDRAW;
@@ -126,6 +128,9 @@ int main(int argc, char* argv[]) {
     // Load config if existent
     globalconfig.load_config();
 
+    // Init state
+    globalstate.init();
+
     // Init curses
     initscr();
     keypad(stdscr, TRUE);
@@ -133,7 +138,7 @@ int main(int argc, char* argv[]) {
     raw();
     
     // Init colors
-    init_color_defs(globalconfig);
+    Tools::init_color_defs(globalconfig);
 
     getmaxyx(stdscr, globalstate.max_y, globalstate.max_x);
 

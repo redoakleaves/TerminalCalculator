@@ -8,21 +8,24 @@
 
 #define PROJECT_VER "@PROJECT_VERSION@"
 
-class Config {
-public:
-    Config();
-    ~Config();
+namespace Tools
+{
+    class Config {
+    public:
+        Config();
+        ~Config();
 
-    void load_config();
+        void load_config();
 
-    std::string get_value(const char* key);
+        std::string get_value(const char* key);
 
-private:
-    char* home_path;
+    private:
+        char* home_path;
 
-    std::map<std::string, std::string> config_store;
+        std::map<std::string, std::string> config_store;
 
-    void parse_recursive(std::string prefix, YAML::Node child);
-};
+        void parse_recursive(std::string prefix, YAML::Node child);
+    };
+}
 
 #endif

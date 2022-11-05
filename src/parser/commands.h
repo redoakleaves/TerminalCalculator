@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "entry.h"
+#include "tools/entry.h"
 
 enum Commands {
     Exit = 1
@@ -17,6 +17,6 @@ enum Commands {
  * 
  * @return Returns 0 if no command is found, otherwise an integer representing the command is returned.
 */
-int parse_commands(Entry& entry, std::string& substring);
+int parse_commands(Tools::Entry& entry, std::string& substring);
 
 #endif

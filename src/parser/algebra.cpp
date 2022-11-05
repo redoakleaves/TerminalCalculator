@@ -1,29 +1,34 @@
 #include <sstream>
+#include <string>
 #include <regex>
-#include <math.h>
+#include <cmath>
 
+#include <re2/re2.h>
+
+#include <tools/entry.h>
 #include "algebra.h"
 
 static const std::regex exponentExpression("((?:(?:(?:^|[\\*\\/\\+\\-])(?=-))-)?\\d+(?:[\\.\\,]\\d+)?)(\\^)(-?\\d+(?:[\\.\\,]\\d+)?)");
 static const std::regex muldivExpression("((?:(?:(?:^|[\\*\\/\\+\\-])(?=-))-)?\\d+(?:[\\.\\,]\\d+)?)([\\*\\/])(-?\\d+(?:[\\.\\,]\\d+)?)");
 static const std::regex addsubExpression("((?:(?:(?:^|[\\*\\/\\+\\-])(?=-))-)?\\d+(?:[\\.\\,]\\d+)?)([\\+\\-])(-?\\d+(?:[\\.\\,]\\d+)?)");
 
+static const re2::RE2 doubleSignExpression("(?:^|[\\^*\\/+\\=])(--)");
+
 static const std::regex operations[3] = {exponentExpression, muldivExpression, addsubExpression};
 
-void replace_double_signs(std::string& substring) {
-    std::smatch match;
-
-    while (std::regex_search(substring, match, std::regex("(?:^|[\\^*\\/+\\=])(--)"))) {
+static void replace_double_signs(std::string& substring) {
+    re2::StringPiece match;
+    while (re2::RE2::PartialMatch(substring, doubleSignExpression, &match)) {
         if (match.length() > 2)
-            substring.replace(match.position() + 1, 2, "");
+            substring.replace((match.data() - substring.data()) + 1, 2, "");
         else
-            substring.replace(match.position(), 2, "");
+            substring.replace(match.data() - substring.data(), 2, "");
     }
 
     substring = std::regex_replace(substring, std::regex("(--)"), "+");
 }
 
-void parse_algebra(Entry& entry, std::string& substring) {
+void parse_algebra(Tools::Entry& entry, std::string& substring) {
     std::smatch match;
     std::stringstream stream;
 
@@ -43,17 +48,13 @@ void parse_algebra(Entry& entry, std::string& substring) {
             if (second_string.length() > 2 && second_string.at(1) == '-')
                 second_string.erase(0, 1);
 
-            stream.str(first_string);
-            stream >> result;
-            stream.clear();
-            stream.str(second_string);
-            stream >> temp_number;
-            stream.clear();
+            result = std::stod(first_string);
+            temp_number = std::stod(second_string);
 
             switch (i)
             {
             case 0:
-                result = pow(result, temp_number);
+                result = std::pow(result, temp_number);
                 break;
 
             case 1:
@@ -77,6 +78,7 @@ void parse_algebra(Entry& entry, std::string& substring) {
             stream.str("");
             stream << result;
             substring.replace(match.position(), match.length(), stream.str());
+            stream.clear();
 
             replace_double_signs(substring);
         }

@@ -1,8 +1,16 @@
 #ifndef _ALGEBRA_H_
 #define _ALGEBRA_H_
 
-#include "entry.h"
+#include <string>
 
-void parse_algebra(Entry& entry, std::string& substring);
+#include "tools/entry.h"
+
+/**
+ * @brief Parses algebra expressions within a substring.
+ * 
+ * @param entry Reference to the current entry.
+ * @param substring Reference to the substring.
+*/
+void parse_algebra(Tools::Entry& entry, std::string& substring);
 
 #endif

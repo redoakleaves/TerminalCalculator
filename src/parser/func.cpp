@@ -7,6 +7,7 @@
 
 #include <re2/re2.h>
 
+#include <tools/entry.h>
 #include "func.h"
 
 static const re2::RE2 func_def_expression("^([a-zA-Z]+)\\(([a-zA-Z]+(?:;[a-zA-Z]+)*)\\)=(.+)$");
@@ -34,7 +35,7 @@ static const std::map<std::string, int> const_func_store = {
     { "cot", 1 }
 };
 
-int parse_func_def(Entry& entry, std::string& substring, int final) {
+int parse_func_def(Tools::Entry& entry, std::string& substring, int final) {
     // Detect multiple equal signs
     if (substring.find('=') != substring.rfind('='))
         return 0;
@@ -66,7 +67,7 @@ int parse_func_def(Entry& entry, std::string& substring, int final) {
     return 0;
 }
 
-void parse_func_usage(Entry& entry, std::string& substring) {
+void parse_func_usage(Tools::Entry& entry, std::string& substring) {
     re2::StringPiece func_name;
     std::string func_params;
     while (re2::RE2::PartialMatch(substring, func_usage_expression, &func_name, &func_params)) {
@@ -115,7 +116,7 @@ void parse_func_usage(Entry& entry, std::string& substring) {
     }
 }
 
-void parse_const_func_usage(Entry& entry, std::string& substring) {
+void parse_const_func_usage(Tools::Entry& entry, std::string& substring) {
     re2::StringPiece func_name;
     std::string func_params;
     while (re2::RE2::PartialMatch(substring, const_func_usage_expression, &func_name, &func_params))

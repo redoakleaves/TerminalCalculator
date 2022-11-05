@@ -1,10 +1,11 @@
 #include <string>
-#define _USE_MATH_DEFINES
-#include <math.h>
 #include <map>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #include <re2/re2.h>
 
+#include "tools/entry.h"
 #include "vars.h"
 
 static const re2::RE2 var_def_expression("^([a-zA-Z]+)=(-?\\d+(?:[\\.\\,]\\d+)?)$");
@@ -16,7 +17,7 @@ static std::map<std::string, double> const_store = {
     { "e", M_E }
 };
 
-int parse_var_def(Entry& entry, std::string& substring, int final) {
+int parse_var_def(Tools::Entry& entry, std::string& substring, int final) {
     // Detect multiple equal signs
     if (substring.find('=') != substring.rfind('='))
         return 0;
@@ -35,7 +36,7 @@ int parse_var_def(Entry& entry, std::string& substring, int final) {
     return 0;
 }
 
-void parse_var_usage(Entry& entry, std::string& substring) {
+void parse_var_usage(Tools::Entry& entry, std::string& substring) {
     re2::StringPiece match;
     while (re2::RE2::PartialMatch(substring, var_usage_expression, &match)) {
         std::string var_name = match.ToString();
