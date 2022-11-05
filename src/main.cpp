@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string>
+
 #if defined(_WIN32)
 #include <curses.h>
 #else
@@ -138,7 +141,12 @@ int main(int argc, char* argv[]) {
 
     // Print title
     move(0, 0);
-    printw("Terminal Calculator %s\n", PROJECT_VER);
+    std::string show_version_setting = globalconfig.get_value("general.show_version");
+    if (show_version_setting.empty() || show_version_setting == "true") {
+        printw("Terminal Calculator %s\n", PROJECT_VER);
+    } else {
+        printw("Terminal Calculator\n");
+    }
 
     int result_input = REDRAW;
     int result_parse = -1;
