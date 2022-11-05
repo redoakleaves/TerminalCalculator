@@ -1,4 +1,7 @@
-#include <regex>
+#include <string>
+#include <algorithm>
+
+#include <re2/re2.h>
 
 #include "parser.h"
 #include "commands.h"
@@ -6,12 +9,8 @@
 #include "func.h"
 #include "vars.h"
 
-static const std::regex subexpression("\\((?=[^(])[\\w\\*\\/\\+\\-]+\\)");
-
-int parse_substring(Entry& entry, std::string& substring) {
-    parse_algebra(entry, substring);
-    return std::regex_match(substring, std::regex("[-]?\\d+[\\.\\,]?(?:\\d+)?"));
-}
+static const re2::RE2 sub_expression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*\\/+-]+)\\)");
+static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
 int parse(Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
@@ -25,29 +24,42 @@ int parse(Entry& entry, int final) {
     if (command)
         return command;
 
-    // Resolve functions and vars
+    // Resolve function and variable definitions
     if (working_copy.find('=') != std::string::npos) {
         if (!parse_func_def(entry, working_copy, final)) {
             parse_var_def(entry, working_copy, final);
         }
-    } else {
-        parse_func_usage(entry, working_copy);
-        parse_var_usage(entry, working_copy);
+        return 0;
     }
 
-    // Search for subexpressions
-    std::smatch match;
-    while (std::regex_search(working_copy, match, subexpression)) {
-        std::string subexpression = match.str().substr(1, match.str().length() - 2);
-        parse_substring(entry, subexpression);
-        working_copy.replace(match.position(), match.length(), subexpression);
-    }
+    // Resolve function and variable usage
+    parse_func_usage(entry, working_copy);
+    parse_var_usage(entry, working_copy);
 
-    // Parse remaining string
-    if (parse_substring(entry, working_copy)) {
+    // Parse pre-defined functions, subexpressions, and algebra until nothing changes
+    int old_length = 0;
+    do {
+        old_length = working_copy.length();
+        
+        parse_const_func_usage(entry, working_copy);
+
+        // Search for subexpressions
+        re2::StringPiece subexpression;
+        while (re2::RE2::PartialMatch(working_copy, sub_expression, &subexpression))
+        {
+            std::string subexpression_string = subexpression.ToString();
+            parse_algebra(entry, subexpression_string);
+            working_copy.replace(subexpression.data() - working_copy.data() - 1, subexpression.length() + 2, subexpression_string);
+        }
+
+        parse_algebra(entry, working_copy);
+    } while (old_length != working_copy.length());
+
+    // Check remaining string
+    if (re2::RE2::FullMatch(working_copy, valid_result_expression)) {
         entry.set_result(working_copy);
     } else {
-        std::string result_empty = std::string("");
+        std::string result_empty;
         entry.set_result(result_empty);
     }
 
