@@ -3,10 +3,12 @@
 #include <string>
 #include <map>
 #include <vector>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include <re2/re2.h>
 
+#include "global.h"
 #include <tools/entry.h>
 #include "func.h"
 
@@ -34,6 +36,7 @@ static const std::map<std::string, int> const_func_store = {
     { "sec", 1 },
     { "cot", 1 }
 };
+static const std::vector<std::string> trigonometric_func_list = { "sin", "cos", "tan", "csc", "sec", "cot" };
 
 int parse_func_def(Tools::Entry& entry, std::string& substring, int final) {
     // Detect multiple equal signs
@@ -140,6 +143,12 @@ void parse_const_func_usage(Tools::Entry& entry, std::string& substring) {
         // Check whether enough params were passed
         if (count != const_func_store.at(func_name_string))
             break;
+
+        // Convert first param to radians if necessary
+        if (std::find(trigonometric_func_list.begin(), trigonometric_func_list.end(), func_name_string) != trigonometric_func_list.end()) {
+            if (globalstate.use_deg)
+                param_list[0] *= M_PI / 180.0;
+        }
 
         // Calculate result
         double result = 0;

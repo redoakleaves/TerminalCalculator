@@ -20,6 +20,11 @@ namespace Tools
     }
 
     void State::init() {
+        std::string use_deg_setting = globalconfig.get_value("general.use_deg");
+        if (use_deg_setting.empty() || use_deg_setting == "true")
+            use_deg = 1;
+        else
+            use_deg = 0;
     }
 
     void State::create_new_entry() {

@@ -4,6 +4,7 @@
 
 #include <re2/re2.h>
 
+#include "global.h"
 #include "tools/color.h"
 #include "tools/entry.h"
 #include "commands.h"
@@ -30,6 +31,12 @@ int parse_commands(Tools::Entry& entry, std::string& substring) {
         // Return int representing command
         if (command == "exit")
             return Commands::Exit;
+
+        else if (command == "deg") {
+            globalstate.use_deg = 1;
+        } else if (command == "rad") {
+            globalstate.use_deg = 0;
+        }
     }
 
     return 0;
