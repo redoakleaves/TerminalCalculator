@@ -161,7 +161,7 @@ int main(int argc, char* argv[]) {
 
         do {
             if (result_input == REDRAW) {
-                result_parse = parse(*globalstate.current);
+                parse(*globalstate.current);
 
                 move(globalstate.cursor_y, 0);
                 clrtoeol();
@@ -175,11 +175,11 @@ int main(int argc, char* argv[]) {
             result_input = handle_input(globalstate.current, getch());
         } while (result_input > 0);
 
+        // Final parse for var definitions etc.
+        result_parse = parse(*globalstate.current, 1);
+
         if (result_parse == Commands::Exit || result_input == EXIT)
             break;
-
-        // Final parse for var definitions etc.
-        parse(*globalstate.current, 1);
 
         globalstate.cursor_y++;
         globalstate.cursor_x = 0;

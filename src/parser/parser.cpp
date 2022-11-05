@@ -21,7 +21,7 @@ int parse(Tools::Entry& entry, int final) {
     working_copy.erase(std::remove_if(working_copy.begin(), working_copy.end(), ::isspace), working_copy.end());
 
     // Check for commands
-    int command = parse_commands(entry, working_copy);
+    int command = parse_commands(entry, working_copy, final);
     if (command)
         return command;
 

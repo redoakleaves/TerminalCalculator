@@ -6,7 +6,8 @@
 #include "tools/entry.h"
 
 enum Commands {
-    Exit = 1
+    NoAction = 1,
+    Exit = 2
 };
 
 /**
@@ -14,9 +15,10 @@ enum Commands {
  * 
  * @param entry Reference to the current entry.
  * @param substring Reference to the substring.
+ * @param final Boolean signaling final pass.
  * 
  * @return Returns 0 if no command is found, otherwise an integer representing the command is returned.
 */
-int parse_commands(Tools::Entry& entry, std::string& substring);
+int parse_commands(Tools::Entry& entry, std::string& substring, int final = 0);
 
 #endif

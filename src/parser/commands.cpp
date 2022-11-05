@@ -11,7 +11,8 @@
 
 static const re2::RE2 command_expression("^:([a-zA-Z]+)$");
 
-int parse_commands(Tools::Entry& entry, std::string& substring) {
+int parse_commands(Tools::Entry& entry, std::string& substring, int final) {
+    int command_value = 0;
     std::string command;
     if (re2::RE2::FullMatch(substring, command_expression, &command)) {
         std::string command_copy = command;
@@ -21,23 +22,33 @@ int parse_commands(Tools::Entry& entry, std::string& substring) {
             return std::tolower(c);
         });
 
+        // Check command validity
+        if (command == "exit") {
+            if (final)
+                command_value = Commands::Exit;
+            else
+                command_value = Commands::NoAction;
+        }
+        // Degree/Radian switching
+        else if (command == "deg") {
+            if (final)
+                globalstate.use_deg = 1;
+            command_value = Commands::NoAction;
+        } else if (command == "rad") {
+            if (final)
+                globalstate.use_deg = 0;
+            command_value = Commands::NoAction;
+        } else {
+            return 0;
+        }
+
         // Colorize command in entry
         std::stringstream stream;
         stream << '{' << COLOR_COMMAND << '}';
         stream << ':' << command_copy;
         std::string stylized = stream.str();
         entry.set_stylized(stylized);
-
-        // Return int representing command
-        if (command == "exit")
-            return Commands::Exit;
-
-        else if (command == "deg") {
-            globalstate.use_deg = 1;
-        } else if (command == "rad") {
-            globalstate.use_deg = 0;
-        }
     }
 
-    return 0;
+    return command_value;
 }
