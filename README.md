@@ -4,7 +4,7 @@
 
 ## Introduction
 `TerminalCalculator` is a `ncurses`-based calculator with real-time parsing and colorization.
-It runs on both Unix based operating systems as well as Windows.
+It runs on both Unix based operating systems and Windows.
 
 Besides supporting common algebraic operations, `TerminalCalculator` also enables the use of numeric variables and custom functions.
 Also, a selection of pre-defined functions such as `abs`, `ceil`, and `floor` alongside trigonometric functions and others can be utilized.
@@ -30,7 +30,7 @@ cmake [-G generator] ..
 
 Choosing a specific generator is optional.
 
-Finally, excute the build command associated with the generator you chose earlier.
+Finally, execute the build command associated with the generator you chose earlier.
 
 ## Usage
 A complete list of all supported features can be found in [usage](doc/usage.md).

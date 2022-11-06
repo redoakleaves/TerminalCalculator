@@ -11,9 +11,11 @@ On Windows machines this file can either be `{homedrive}:\User\{username}\.tccon
 ## Format
 `TerminalCalculator`'s configuration files are composed in `YAML`.
 A configuration file may look as follows:
+
 ```yaml
 general:
     show_version: true
+    use_deg: true
 
 colors:
     result: 1
@@ -27,6 +29,7 @@ Within the `general` node, following values can be changed:
 |Name|Description|Default|
 |----|-----------|-------|
 |`show_version`|Show version number in title|`true`|
+|`use_deg`|Use degrees when solving trigonometric functions|`true`|
 
 ### Colors
 `TerminalCalculator` uses `ncurses`' color definitions.
