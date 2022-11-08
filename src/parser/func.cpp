@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <algorithm>
 #include <map>
 #include <vector>
 #define _USE_MATH_DEFINES
@@ -9,7 +10,7 @@
 #include <re2/re2.h>
 
 #include "global.h"
-#include <tools/entry.h>
+#include "tools/entry.h"
 #include "func.h"
 
 static const re2::RE2 func_def_expression("^([a-zA-Z]+)\\(([a-zA-Z]+(?:;[a-zA-Z]+)*)\\)=(.+)$");

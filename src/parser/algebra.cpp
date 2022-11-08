@@ -5,7 +5,7 @@
 
 #include <re2/re2.h>
 
-#include <tools/entry.h>
+#include "tools/entry.h"
 #include "algebra.h"
 
 static const std::regex exponentExpression("((?:(?:(?:^|[\\*\\/\\+\\-])(?=-))-)?\\d+(?:[\\.\\,]\\d+)?)(\\^)(-?\\d+(?:[\\.\\,]\\d+)?)");
