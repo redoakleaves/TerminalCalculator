@@ -7,3 +7,4 @@ project(TerminalCalculator VERSION 0.0.0.1)
 add_subdirectory(vendor)
 
 add_subdirectory(src)
+add_subdirectory(test)

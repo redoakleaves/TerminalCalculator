@@ -1,4 +1,9 @@
-# Build PDCurses
+# googletest
+option(BUILD_GMOCK OFF)
+option(INSTALL_GTEST OFF)
+add_subdirectory(googletest)
+
+# PDCurses
 if (WIN32)
     file(GLOB SRC_FILES PDCurses/pdcurses/*.c PDCurses/wincon/*.c)
 

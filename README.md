@@ -12,6 +12,7 @@ Also, a selection of pre-defined functions such as `abs`, `ceil`, and `floor` al
 ## Dependencies
 Before trying to build `TerminalCalculator`, please make sure to clone all submodules within this repository.
 
+- [googletest](https://github.com/google/googletest): Test framework.
 - [PDCurses](https://github.com/wmcbrine/PDCurses) (only Windows): `ncurses` replacement for Windows.
 - [RE2](https://github.com/google/re2): Regex library for most of `TerminalCalculator`'s regex expressions.
 - [yaml-cpp](https://github.com/jbeder/yaml-cpp): YAML parser.
