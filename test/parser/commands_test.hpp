@@ -34,12 +34,15 @@ TEST(CommandsTest, ExistentCommand) {
     EXPECT_EQ(globalstate.use_deg, 0);
 }
 
-TEST(CommandsTest, NoCommand) {
+TEST(CommandsTest, InvalidCommand) {
     Tools::Entry entry;
     std::string test_string;
 
     test_string = ":xyz";
     EXPECT_EQ(parse_commands(entry, test_string, 0), 0);
+
+    test_string = "xzy:exit";
+    EXPECT_EQ(parse_commands(entry, test_string, 1), 0);
 
     test_string = "exit";
     EXPECT_EQ(parse_commands(entry, test_string, 1), 0);
