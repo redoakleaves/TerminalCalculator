@@ -4,6 +4,7 @@
 #include "tools/state.h"
 
 #include "parser/commands_test.hpp"
+#include "parser/vars_test.hpp"
 
 Tools::Config globalconfig;
 Tools::State globalstate;

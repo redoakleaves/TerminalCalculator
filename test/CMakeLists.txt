@@ -11,4 +11,5 @@ target_include_directories(TerminalCalculatorTests PUBLIC ${CMAKE_CURRENT_BINARY
 target_sources(TerminalCalculatorTests
     PUBLIC
         parser/commands_test.hpp
+        parser/vars_test.hpp
 )
