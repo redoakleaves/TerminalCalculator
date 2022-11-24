@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
 
 #include <gtest/gtest.h>
 
@@ -64,6 +64,12 @@ TEST(VarTest, HandleVarUsage) {
 
     test_string = "A=2";
     parse_var_def(entry, test_string, 1);
+    test_string = "B=5";
+    parse_var_def(entry, test_string, 1);
+
+    test_string = "A+4";
+    parse_var_usage(entry, test_string);
+    EXPECT_EQ(test_string, "2+4");
 
     test_string = "3*A";
     parse_var_usage(entry, test_string);
@@ -72,15 +78,19 @@ TEST(VarTest, HandleVarUsage) {
     test_string = "3*A+4";
     parse_var_usage(entry, test_string);
     EXPECT_EQ(test_string, "3*2+4");
+
+    test_string = "A+B";
+    parse_var_usage(entry, test_string);
+    EXPECT_EQ(test_string, "2+5");
 }
 
 TEST(VarTest, HandleInvalidUsage) {
     Tools::Entry entry;
     std::string test_string;
 
-    test_string = "3*B+4";
+    test_string = "3*C+4";
     parse_var_usage(entry, test_string);
-    EXPECT_EQ(test_string, "3*B+4");
+    EXPECT_EQ(test_string, "3*C+4");
 }
 
 #endif
