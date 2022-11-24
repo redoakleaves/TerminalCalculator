@@ -30,9 +30,17 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      uses: knicknic/os-specific-run@v1.0.4
-      with:
-        linux: ${{github.workspace}}/build/test/TerminalCalculatorTests
-        macos: ${{github.workspace}}/build/test/TerminalCalculatorTests
-        windows: ${{github.workspace}}/build/test/TerminalCalculatorTests.exe
+    - name: Test on Windows
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{github.workspace}}\build
+      run: .\test\TerminalCalculatorTests.exe
+
+    - name: Test on Ubuntu
+      if: matrix.os == 'ubuntu-latest'
+      working-directory: ${{github.workspace}}/build
+      run: ./test/TerminalCalculatorTests
+
+    - name: Test on macOS
+      if: matrix.os == 'macos-latest'
+      working-directory: ${{github.workspace}}/build
+      run: ./test/TerminalCalculatorTests
