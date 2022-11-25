@@ -48,11 +48,11 @@ int parse_func_def(Tools::Entry& entry, std::string& substring, int final) {
     std::string func_params;
     std::string func_expression;
     if (re2::RE2::FullMatch(substring, func_def_expression, &func_name, &func_params, &func_expression)) {
-        if (!final)
-            return 1;
-
         if (const_func_store.count(func_name))
             return 0;
+
+        if (!final)
+            return 1;
 
         // Create new function entry
         function_t function;
@@ -123,6 +123,7 @@ void parse_func_usage(Tools::Entry& entry, std::string& substring) {
 void parse_const_func_usage(Tools::Entry& entry, std::string& substring) {
     re2::StringPiece func_name;
     std::string func_params;
+    std::stringstream stream;
     while (re2::RE2::PartialMatch(substring, const_func_usage_expression, &func_name, &func_params))
     {
         std::string func_name_string = func_name.ToString();
@@ -183,6 +184,9 @@ void parse_const_func_usage(Tools::Entry& entry, std::string& substring) {
             result = 1.0 / std::tan(param_list[0]);
         }
 
-        substring.replace(func_name.data() - substring.data(), func_name.length() + func_params.length() + 2, std::to_string(result));
+        stream.clear();
+        stream.str("");
+        stream << result;
+        substring.replace(func_name.data() - substring.data(), func_name.length() + func_params.length() + 2, stream.str());
     }
 }
