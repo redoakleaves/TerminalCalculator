@@ -55,6 +55,10 @@ TEST(FuncTest, HandleConstUsage) {
     parse_const_func_usage(entry, test_string);
     EXPECT_EQ(test_string, "1");
 
+    test_string = "pow(2;3)";
+    parse_const_func_usage(entry, test_string);
+    EXPECT_EQ(test_string, "8");
+
     test_string = "sin(90)+abs(-2)";
     parse_const_func_usage(entry, test_string);
     EXPECT_EQ(test_string, "1+2");

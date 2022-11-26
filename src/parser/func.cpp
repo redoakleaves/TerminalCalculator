@@ -21,6 +21,7 @@ static const re2::RE2 const_func_usage_expression("([a-zA-Z]+)\\(((?:-?\\d+(?:[\
 
 static std::map<std::string, function_t> func_store;
 static const std::map<std::string, int> const_func_store = {
+    { "pow", 2 },
     { "sqrt", 1 },
     { "ln", 1 },
     { "log", 1 },
@@ -154,7 +155,9 @@ void parse_const_func_usage(Tools::Entry& entry, std::string& substring) {
 
         // Calculate result
         double result = 0;
-        if (func_name_string == "sqrt") {
+        if (func_name_string == "pow") {
+            result = std::pow(param_list[0], param_list[1]);
+        } else if (func_name_string == "sqrt") {
             result = std::sqrt(param_list[0]);
         } else if (func_name_string == "ln") {
             result = std::log(param_list[0]);

@@ -1,7 +1,7 @@
 # Usage
 
-## Algebra
-- `^`: Power
+## Arithmetic
+- `pow`: Power
 - `sqrt`: Square root
 - `*`: Multiplication
 - `/`: Division
