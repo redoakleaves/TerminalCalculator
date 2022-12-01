@@ -28,7 +28,7 @@ target_sources(TerminalCalculatorLibrary
 
         parser/parser.cpp
         parser/commands.cpp
-        parser/algebra.cpp
+        parser/arithmetic.cpp
         parser/vars.cpp
         parser/func.cpp
 )

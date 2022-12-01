@@ -6,7 +6,7 @@
 #include "tools/entry.h"
 #include "parser.h"
 #include "commands.h"
-#include "algebra.h"
+#include "arithmetic.h"
 #include "func.h"
 #include "vars.h"
 
@@ -49,11 +49,11 @@ int parse(Tools::Entry& entry, int final) {
         while (re2::RE2::PartialMatch(working_copy, sub_expression, &subexpression))
         {
             std::string subexpression_string = subexpression.ToString();
-            parse_algebra(entry, subexpression_string);
+            parse_arithmetic(entry, subexpression_string);
             working_copy.replace(subexpression.data() - working_copy.data() - 1, subexpression.length() + 2, subexpression_string);
         }
 
-        parse_algebra(entry, working_copy);
+        parse_arithmetic(entry, working_copy);
     } while (old_length != working_copy.length());
 
     // Check remaining string

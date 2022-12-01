@@ -6,7 +6,7 @@
 `TerminalCalculator` is a `ncurses`-based calculator with real-time parsing and colorization.
 It runs on both Unix based operating systems and Windows.
 
-Besides supporting common algebraic operations, `TerminalCalculator` also enables the use of numeric variables and custom functions.
+Besides supporting common arithmetic operations, `TerminalCalculator` also enables the use of numeric variables and custom functions.
 Also, a selection of pre-defined functions such as `abs`, `ceil`, and `floor` alongside trigonometric functions and others can be utilized.
 
 ## Dependencies
