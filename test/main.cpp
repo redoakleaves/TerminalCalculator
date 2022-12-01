@@ -3,6 +3,7 @@
 #include "tools/config.h"
 #include "tools/state.h"
 
+#include "parser/arithmetic_test.hpp"
 #include "parser/commands_test.hpp"
 #include "parser/func_test.hpp"
 #include "parser/vars_test.hpp"
