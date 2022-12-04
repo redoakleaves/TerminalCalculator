@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 
 project(TerminalCalculator VERSION 0.0.0.1)
 

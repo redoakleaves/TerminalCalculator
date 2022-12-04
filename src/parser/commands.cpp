@@ -1,5 +1,5 @@
+#include <sstream>
 #include <string>
-#include <format>
 #include <algorithm>
 
 #include <re2/re2.h>
@@ -43,7 +43,10 @@ int parse_commands(Tools::Entry& entry, std::string& substring, int final) {
         }
 
         // Colorize command in entry
-        std::string stylized = std::format("{{{}}}:{}", COLOR_COMMAND, command_copy);
+        std::stringstream stream;
+        stream << '{' << COLOR_COMMAND << '}';
+        stream << ':' << command_copy;
+        std::string stylized = stream.str();
         entry.set_stylized(stylized);
     }
 
