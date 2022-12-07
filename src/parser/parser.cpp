@@ -14,6 +14,7 @@ static const re2::RE2 sub_expression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*
 static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
 static Parser::CommandParser commandParser;
+static Parser::VarParser varParser;
 
 int parse(Tools::Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
@@ -30,14 +31,14 @@ int parse(Tools::Entry& entry, int final) {
     // Resolve function and variable definitions
     if (working_copy.find('=') != std::string::npos) {
         if (!parse_func_def(entry, working_copy, final)) {
-            parse_var_def(entry, working_copy, final);
+            varParser.ParseVarDefinitions(entry, working_copy, final);
         }
         return 0;
     }
 
     // Resolve function and variable usage
     parse_func_usage(entry, working_copy);
-    parse_var_usage(entry, working_copy);
+    varParser.ParseVarUsage(entry, working_copy);
 
     // Parse pre-defined functions, subexpressions, and algebra until nothing changes
     int old_length = 0;
