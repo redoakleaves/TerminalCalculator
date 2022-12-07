@@ -13,6 +13,8 @@
 static const re2::RE2 sub_expression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*\\/+-]+)\\)");
 static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
+static Parser::CommandParser commandParser;
+
 int parse(Tools::Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
 
@@ -21,7 +23,7 @@ int parse(Tools::Entry& entry, int final) {
     working_copy.erase(std::remove_if(working_copy.begin(), working_copy.end(), ::isspace), working_copy.end());
 
     // Check for commands
-    int command = parse_commands(entry, working_copy, final);
+    int command = commandParser.ParseSubstring(entry, working_copy, final);
     if (command)
         return command;
 

@@ -12,40 +12,42 @@
 #include "global.h"
 #include "parser/commands.h"
 
+static Parser::CommandParser commandParser;
+
 TEST(CommandsTest, ExistentCommand) {
     Tools::Entry entry;
-    std::string test_string;
+    std::string testString;
 
-    test_string = ":exit";
-    EXPECT_EQ(parse_commands(entry, test_string, 1), Commands::Exit);
+    testString = ":exit";
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), Commands::Exit);
 
-    test_string = ":deg";
+    testString = ":deg";
     globalstate.use_deg = 0;
-    EXPECT_EQ(parse_commands(entry, test_string, 0), Commands::NoAction);
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 0), Commands::NoAction);
     EXPECT_EQ(globalstate.use_deg, 0);
-    EXPECT_EQ(parse_commands(entry, test_string, 1), Commands::NoAction);
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), Commands::NoAction);
     EXPECT_EQ(globalstate.use_deg, 1);
 
-    test_string = ":rad";
+    testString = ":rad";
     globalstate.use_deg = 1;
-    EXPECT_EQ(parse_commands(entry, test_string, 0), Commands::NoAction);
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 0), Commands::NoAction);
     EXPECT_EQ(globalstate.use_deg, 1);
-    EXPECT_EQ(parse_commands(entry, test_string, 1), Commands::NoAction);
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), Commands::NoAction);
     EXPECT_EQ(globalstate.use_deg, 0);
 }
 
 TEST(CommandsTest, InvalidCommand) {
     Tools::Entry entry;
-    std::string test_string;
+    std::string testString;
 
-    test_string = ":xyz";
-    EXPECT_EQ(parse_commands(entry, test_string, 0), 0);
+    testString = ":xyz";
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 0), 0);
 
-    test_string = "xzy:exit";
-    EXPECT_EQ(parse_commands(entry, test_string, 1), 0);
+    testString = "xzy:exit";
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), 0);
 
-    test_string = "exit";
-    EXPECT_EQ(parse_commands(entry, test_string, 1), 0);
+    testString = "exit";
+    EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), 0);
 }
 
 #endif

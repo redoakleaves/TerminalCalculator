@@ -9,46 +9,49 @@
 #include "tools/entry.h"
 #include "commands.h"
 
-static const re2::RE2 command_expression("^:([a-zA-Z]+)$");
+namespace Parser {
+    const re2::RE2 CommandParser::commandExpression("^:([a-zA-Z]+)$");
 
-int parse_commands(Tools::Entry& entry, std::string& substring, int final) {
-    int command_value = 0;
-    std::string command;
-    if (re2::RE2::FullMatch(substring, command_expression, &command)) {
-        std::string command_copy = command;
+    int CommandParser::ParseSubstring(Tools::Entry& entry, std::string& substring, int final) {
+        int commandValue = 0;
+        std::string commandString;
+        if (re2::RE2::FullMatch(substring, commandExpression, &commandString)) {
+            std::string commandCopy = commandString;
 
-        // Convert command to lowercase
-        std::transform(command.begin(), command.end(), command.begin(), [](unsigned char c) {
-            return std::tolower(c);
-        });
+            // Convert command to lowercase
+            std::transform(commandString.begin(), commandString.end(), commandString.begin(), [](unsigned char c) {
+                return std::tolower(c);
+            });
 
-        // Check command validity
-        if (command == "exit") {
-            if (final)
-                command_value = Commands::Exit;
-            else
-                command_value = Commands::NoAction;
+            // Check command validity
+            if (commandString == "exit") {
+                if (final)
+                    commandValue = Commands::Exit;
+                else
+                    commandValue = Commands::NoAction;
+            }
+            // Degree/Radian switching
+            else if (commandString == "deg") {
+                if (final)
+                    globalstate.use_deg = 1;
+                commandValue = Commands::NoAction;
+            } else if (commandString == "rad") {
+                if (final)
+                    globalstate.use_deg = 0;
+                commandValue = Commands::NoAction;
+            // Invalid command
+            } else {
+                return 0;
+            }
+
+            // Colorize command in entry
+            std::stringstream stream;
+            stream << '{' << COLOR_COMMAND << '}';
+            stream << ':' << commandCopy;
+            std::string stylizedString = stream.str();
+            entry.set_stylized(stylizedString);
         }
-        // Degree/Radian switching
-        else if (command == "deg") {
-            if (final)
-                globalstate.use_deg = 1;
-            command_value = Commands::NoAction;
-        } else if (command == "rad") {
-            if (final)
-                globalstate.use_deg = 0;
-            command_value = Commands::NoAction;
-        } else {
-            return 0;
-        }
 
-        // Colorize command in entry
-        std::stringstream stream;
-        stream << '{' << COLOR_COMMAND << '}';
-        stream << ':' << command_copy;
-        std::string stylized = stream.str();
-        entry.set_stylized(stylized);
+        return commandValue;
     }
-
-    return command_value;
 }
