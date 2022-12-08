@@ -15,6 +15,7 @@ static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
 static Parser::CommandParser commandParser;
 static Parser::VarParser varParser;
+static Parser::FuncParser funcParser;
 
 int parse(Tools::Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
@@ -30,14 +31,14 @@ int parse(Tools::Entry& entry, int final) {
 
     // Resolve function and variable definitions
     if (working_copy.find('=') != std::string::npos) {
-        if (!parse_func_def(entry, working_copy, final)) {
+        if (!funcParser.ParseFuncDefinition(entry, working_copy, final)) {
             varParser.ParseVarDefinitions(entry, working_copy, final);
         }
         return 0;
     }
 
     // Resolve function and variable usage
-    parse_func_usage(entry, working_copy);
+    funcParser.ParseFuncUsage(entry, working_copy);
     varParser.ParseVarUsage(entry, working_copy);
 
     // Parse pre-defined functions, subexpressions, and algebra until nothing changes
@@ -45,7 +46,7 @@ int parse(Tools::Entry& entry, int final) {
     do {
         old_length = working_copy.length();
         
-        parse_const_func_usage(entry, working_copy);
+        funcParser.ParseConstFuncUsage(entry, working_copy);
 
         // Search for subexpressions
         re2::StringPiece subexpression;
