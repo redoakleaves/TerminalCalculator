@@ -16,6 +16,7 @@ static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 static Parser::CommandParser commandParser;
 static Parser::VarParser varParser;
 static Parser::FuncParser funcParser;
+static Parser::ArithmeticParser arithmeticParser;
 
 int parse(Tools::Entry& entry, int final) {
     entry.set_stylized(entry.raw_content);
@@ -53,11 +54,11 @@ int parse(Tools::Entry& entry, int final) {
         while (re2::RE2::PartialMatch(working_copy, sub_expression, &subexpression))
         {
             std::string subexpression_string = subexpression.ToString();
-            parse_arithmetic(entry, subexpression_string);
+            arithmeticParser.ParseArithmetic(entry, subexpression_string);
             working_copy.replace(subexpression.data() - working_copy.data() - 1, subexpression.length() + 2, subexpression_string);
         }
 
-        parse_arithmetic(entry, working_copy);
+        arithmeticParser.ParseArithmetic(entry, working_copy);
     } while (old_length != working_copy.length());
 
     // Check remaining string
