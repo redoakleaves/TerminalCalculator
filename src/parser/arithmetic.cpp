@@ -48,6 +48,8 @@ namespace Parser {
                     } else if (operation == '/') {
                         operandStack.pop_back();
                         operationStack.pop_back();
+                        if (tempNumber == 0)
+                            return;
                         tempNumber = operand / tempNumber;
                     }
                 }

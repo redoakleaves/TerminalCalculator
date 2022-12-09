@@ -12,74 +12,78 @@ static Parser::ArithmeticParser arithmeticParser;
 
 TEST(ArithmeticTest, HandleSingleOperations) {
     Tools::Entry entry;
-    std::string test_string;
+    std::string testString;
 
-    test_string = "2.2+6";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "8.2");
+    testString = "2.2+6";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "8.2");
 
-    test_string = "2.2--6";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "8.2");
+    testString = "2.2--6";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "8.2");
 
-    test_string = "-2.2+6";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "3.8");
+    testString = "-2.2+6";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "3.8");
 
-    test_string = "2.2-6";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "-3.8");
+    testString = "2.2-6";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "-3.8");
 
-    test_string = "2.2+-6";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "-3.8");
+    testString = "2.2+-6";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "-3.8");
 
-    test_string = "2.2*6";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "13.2");
+    testString = "2.2*6";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "13.2");
 
-    test_string = "6/3";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "2");
+    testString = "6/3";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "2");
 
 }
 
 TEST(ArithmeticTest, HandleMultipleOperations) {
     Tools::Entry entry;
-    std::string test_string;
+    std::string testString;
 
-    test_string = "2*6-3";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "9");
+    testString = "2*6-3";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "9");
     
-    test_string = "2+6*3";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "20");
+    testString = "2+6*3";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "20");
 
-    test_string = "2*6/3";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "4");
+    testString = "2*6/3";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "4");
 
-    test_string = "2+6-3";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "5");
+    testString = "2+6-3";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "5");
 }
 
 TEST(ArithmeticTest, HandleInvalidInput) {
     Tools::Entry entry;
-    std::string test_string;
+    std::string testString;
 
-    test_string = "2*(3+4)";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "2*(3+4)");
+    testString = "3/0";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "3/0");
 
-    test_string = "2*A";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "2*A");
+    testString = "2*(3+4)";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "2*(3+4)");
 
-    test_string = "2*sin(90)";
-    arithmeticParser.ParseArithmetic(entry, test_string);
-    EXPECT_EQ(test_string, "2*sin(90)");
+    testString = "2*A";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "2*A");
+
+    testString = "2*sin(90)";
+    arithmeticParser.ParseArithmetic(entry, testString);
+    EXPECT_EQ(testString, "2*sin(90)");
 }
 
 #endif
