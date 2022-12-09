@@ -22,18 +22,18 @@ TEST(CommandsTest, ExistentCommand) {
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), Commands::Exit);
 
     testString = ":deg";
-    globalstate.use_deg = 0;
+    globalstate.m_UseDeg = 0;
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 0), Commands::NoAction);
-    EXPECT_EQ(globalstate.use_deg, 0);
+    EXPECT_EQ(globalstate.m_UseDeg, 0);
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), Commands::NoAction);
-    EXPECT_EQ(globalstate.use_deg, 1);
+    EXPECT_EQ(globalstate.m_UseDeg, 1);
 
     testString = ":rad";
-    globalstate.use_deg = 1;
+    globalstate.m_UseDeg = 1;
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 0), Commands::NoAction);
-    EXPECT_EQ(globalstate.use_deg, 1);
+    EXPECT_EQ(globalstate.m_UseDeg, 1);
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, 1), Commands::NoAction);
-    EXPECT_EQ(globalstate.use_deg, 0);
+    EXPECT_EQ(globalstate.m_UseDeg, 0);
 }
 
 TEST(CommandsTest, InvalidCommand) {

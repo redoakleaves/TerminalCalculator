@@ -19,10 +19,10 @@ static Parser::FuncParser funcParser;
 static Parser::ArithmeticParser arithmeticParser;
 
 int parse(Tools::Entry& entry, int final) {
-    entry.set_stylized(entry.raw_content);
+    entry.SetStylized(entry.m_RawContent);
 
     // Create working copy of input and remove spaces
-    std::string working_copy = entry.raw_content;
+    std::string working_copy = entry.m_RawContent;
     working_copy.erase(std::remove_if(working_copy.begin(), working_copy.end(), ::isspace), working_copy.end());
 
     // Check for commands
@@ -63,10 +63,10 @@ int parse(Tools::Entry& entry, int final) {
 
     // Check remaining string
     if (re2::RE2::FullMatch(working_copy, valid_result_expression)) {
-        entry.set_result(working_copy);
+        entry.SetResult(working_copy);
     } else {
         std::string result_empty;
-        entry.set_result(result_empty);
+        entry.SetResult(result_empty);
     }
 
     return 0;

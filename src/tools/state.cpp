@@ -6,30 +6,30 @@
 namespace Tools
 {
     State::State() {
-        history = new Entry();
-        current = history;
-        latest = history;
+        m_History = new Entry();
+        m_Current = m_History;
+        m_Latest = m_History;
 
-        cursor_x = 0;
-        cursor_y = 0;
+        m_CursorX = 0;
+        m_CursorY = 0;
 
-        use_deg = 0;
+        m_UseDeg = 0;
     }
     State::~State() {
-        delete history;
+        delete m_History;
     }
 
-    void State::init() {
-        std::string use_deg_setting = globalconfig.get_value("general.use_deg");
-        if (use_deg_setting.empty() || use_deg_setting == "true")
-            use_deg = 1;
+    void State::Init() {
+        std::string useDegSetting = globalconfig.GetValue("general.use_deg");
+        if (useDegSetting.empty() || useDegSetting == "true")
+            m_UseDeg = 1;
         else
-            use_deg = 0;
+            m_UseDeg = 0;
     }
 
-    void State::create_new_entry() {
-        Entry* new_entry = latest->next = new Entry();
-        new_entry->prev = latest;
-        current = latest = new_entry;
+    void State::CreateNewEntry() {
+        Entry* newEntry = m_Latest->m_Next = new Entry();
+        newEntry->m_Prev = m_Latest;
+        m_Current = m_Latest = newEntry;
     }
 }

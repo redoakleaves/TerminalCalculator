@@ -7,23 +7,23 @@ namespace Tools
 {
     class State {
     public:
-        Entry* history;
-        Entry* current;
-        Entry* latest;
+        Entry* m_History;
+        Entry* m_Current;
+        Entry* m_Latest;
 
-        int max_x;
-        int max_y;
-        int cursor_x;
-        int cursor_y;
+        int m_MaxX;
+        int m_MaxY;
+        int m_CursorX;
+        int m_CursorY;
 
-        int use_deg;
+        int m_UseDeg;
 
         State();
         ~State();
 
-        void init();
+        void Init();
 
-        void create_new_entry();
+        void CreateNewEntry();
     };
 }
 

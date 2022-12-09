@@ -33,11 +33,11 @@ namespace Parser {
             // Degree/Radian switching
             else if (commandString == "deg") {
                 if (final)
-                    globalstate.use_deg = 1;
+                    globalstate.m_UseDeg = 1;
                 commandValue = Commands::NoAction;
             } else if (commandString == "rad") {
                 if (final)
-                    globalstate.use_deg = 0;
+                    globalstate.m_UseDeg = 0;
                 commandValue = Commands::NoAction;
             // Invalid command
             } else {
@@ -49,7 +49,7 @@ namespace Parser {
             stream << '{' << COLOR_COMMAND << '}';
             stream << ':' << commandCopy;
             std::string stylizedString = stream.str();
-            entry.set_stylized(stylizedString);
+            entry.SetStylized(stylizedString);
         }
 
         return commandValue;

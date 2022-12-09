@@ -13,7 +13,7 @@ Tools::State globalstate;
 
 int main(int argc, char **argv) {
     // Init state
-    globalstate.init();
+    globalstate.Init();
 
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

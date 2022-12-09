@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#include "yaml-cpp/yaml.h"
+#include <yaml-cpp/yaml.h>
 
 #define PROJECT_VER "@PROJECT_VERSION@"
 
@@ -15,16 +15,16 @@ namespace Tools
         Config();
         ~Config();
 
-        void load_config();
+        void LoadConfig();
 
-        std::string get_value(const char* key);
+        std::string GetValue(const char* key);
 
     private:
-        char* home_path;
+        char* m_HomePath;
 
-        std::map<std::string, std::string> config_store;
+        std::map<std::string, std::string> m_ConfigStore;
 
-        void parse_recursive(std::string prefix, YAML::Node child);
+        void ParseRecursive(std::string prefix, YAML::Node child);
     };
 }
 

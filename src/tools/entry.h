@@ -8,24 +8,28 @@ namespace Tools
 {
     class Entry {
     public:
-        uint32_t identifier;
+        uint32_t m_Identifier;
 
-        std::string raw_content;
+        std::string m_RawContent;
 
-        Entry* next;
-        Entry* prev;
+        Entry* m_Next;
+        Entry* m_Prev;
 
         Entry();
         ~Entry();
 
-        void set_stylized(std::string& stylized);
-        void set_result(std::string& result);
-        void print_stylized();
-        void print_result();
+        void SetStylized(std::string& stylized);
+        std::string GetStylized();
+
+        void SetResult(std::string& result);
+        std::string GetResult();
+
+        void PrintStylized();
+        void PrintResult();
 
     private:
-        std::string stylized_content;
-        std::string result;
+        std::string m_StylizedContent;
+        std::string m_Result;
     };
 }
 

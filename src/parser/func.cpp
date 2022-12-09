@@ -148,7 +148,7 @@ namespace Parser {
 
             // Convert first param to radians if necessary
             if (std::find(trigonometricFuncList.begin(), trigonometricFuncList.end(), funcNameString) != trigonometricFuncList.end()) {
-                if (globalstate.use_deg)
+                if (globalstate.m_UseDeg)
                     paramList[0] *= M_PI / 180.0;
             }
 

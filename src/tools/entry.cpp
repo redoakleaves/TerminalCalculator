@@ -11,29 +11,37 @@
 #include "color.h"
 #include "entry.h"
 
-static uint32_t current_identifier = 1;
+static uint32_t currentIdentifier = 1;
 
 namespace Tools
 {
     Entry::Entry() {
-        identifier = current_identifier++;
+        m_Identifier = currentIdentifier++;
 
-        next = nullptr;
-        prev = nullptr;
+        m_Next = nullptr;
+        m_Prev = nullptr;
     }
     Entry::~Entry() {
-        if (next)
-            delete next;
+        if (m_Next)
+            delete m_Next;
     }
 
-    void Entry::set_stylized(std::string& stylized) {
-        stylized_content = stylized;
+    void Entry::SetStylized(std::string& stylized) {
+        m_StylizedContent = stylized;
     }
-    void Entry::set_result(std::string& result) {
-        this->result = result;
+    std::string Entry::GetStylized() {
+        return m_StylizedContent;
     }
-    void Entry::print_stylized() {
-        std::stringstream stream(stylized_content);
+
+    void Entry::SetResult(std::string& result) {
+        m_Result = result;
+    }
+    std::string Entry::GetResult() {
+        return m_Result;
+    }
+
+    void Entry::PrintStylized() {
+        std::stringstream stream(m_StylizedContent);
         std::string token;
 
         int color = -1;
@@ -53,13 +61,13 @@ namespace Tools
             }
         }
 
-        print_result();
+        PrintResult();
     }
-    void Entry::print_result() {
-        if (!result.empty()) {
+    void Entry::PrintResult() {
+        if (!m_Result.empty()) {
             printw(" = ");
             attron(COLOR_PAIR(COLOR_RESULT));
-            printw("%s", result.c_str());
+            printw("%s", m_Result.c_str());
             attroff(COLOR_PAIR(COLOR_RESULT));
         }
     }

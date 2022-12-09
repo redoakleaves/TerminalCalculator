@@ -25,14 +25,14 @@ Tools::State globalstate;
 
 int prefix_length() {
     char buffer[10];
-    return snprintf(buffer, 10, "%u", globalstate.latest->identifier) + 2;
+    return snprintf(buffer, 10, "%u", globalstate.m_Latest->m_Identifier) + 2;
 }
 void print_prefix() {
-    printw("%u: ", globalstate.latest->identifier);
+    printw("%u: ", globalstate.m_Latest->m_Identifier);
 }
 
 void print_footer() {
-    move(globalstate.max_y - 1, 0);
+    move(globalstate.m_MaxY - 1, 0);
     printw("UpArrow: Up in history DownArrow: Down in history");
 }
 
@@ -48,39 +48,39 @@ int handle_input(Tools::Entry* entry, int input) {
         // Enter
         case 10:
         case 13:
-            if (!entry->raw_content.empty())
+            if (!entry->m_RawContent.empty())
                 return 0;
             return NO_REDRAW;
 
         // Handle resize
         case KEY_RESIZE:
-            move(globalstate.max_y - 1, 0);
+            move(globalstate.m_MaxY - 1, 0);
             clrtoeol();
-            getmaxyx(stdscr, globalstate.max_y, globalstate.max_x);
+            getmaxyx(stdscr, globalstate.m_MaxY, globalstate.m_MaxX);
             print_footer();
             return NO_REDRAW;
 
         // Move cursor left or right
         case KEY_LEFT:
-            if (globalstate.cursor_x > prefix_length())
-                globalstate.cursor_x--;
+            if (globalstate.m_CursorX > prefix_length())
+                globalstate.m_CursorX--;
             return NO_REDRAW;
         case KEY_RIGHT:
-            if (globalstate.cursor_x < prefix_length() + entry->raw_content.length())
-                globalstate.cursor_x++;
+            if (globalstate.m_CursorX < prefix_length() + entry->m_RawContent.length())
+                globalstate.m_CursorX++;
             return NO_REDRAW;
 
         // Browse history
         case KEY_UP:
-            if (globalstate.current->prev) {
-                globalstate.current = globalstate.current->prev;
-                globalstate.cursor_x = prefix_length() + globalstate.current->raw_content.length();
+            if (globalstate.m_Current->m_Prev) {
+                globalstate.m_Current = globalstate.m_Current->m_Prev;
+                globalstate.m_CursorX = prefix_length() + globalstate.m_Current->m_RawContent.length();
             }
             break;
         case KEY_DOWN:
-            if (globalstate.current->next) {
-                globalstate.current = globalstate.current->next;
-                globalstate.cursor_x = prefix_length() + globalstate.current->raw_content.length();
+            if (globalstate.m_Current->m_Next) {
+                globalstate.m_Current = globalstate.m_Current->m_Next;
+                globalstate.m_CursorX = prefix_length() + globalstate.m_Current->m_RawContent.length();
             }
             break;
 
@@ -88,37 +88,37 @@ int handle_input(Tools::Entry* entry, int input) {
         case 8:
         case 127:
         case KEY_BACKSPACE:
-            if (entry->raw_content.length() > 0) {
-                if (globalstate.current != globalstate.latest) {
-                    globalstate.latest->raw_content = globalstate.current->raw_content;
-                    entry = globalstate.current = globalstate.latest;
+            if (entry->m_RawContent.length() > 0) {
+                if (globalstate.m_Current != globalstate.m_Latest) {
+                    globalstate.m_Latest->m_RawContent = globalstate.m_Current->m_RawContent;
+                    entry = globalstate.m_Current = globalstate.m_Latest;
                 }
-                entry->raw_content.erase(globalstate.cursor_x - prefix_length() - 1, 1);
-                globalstate.cursor_x--;
+                entry->m_RawContent.erase(globalstate.m_CursorX - prefix_length() - 1, 1);
+                globalstate.m_CursorX--;
             }
             break;
 
         // Delete
         case KEY_DC:
-            if (entry->raw_content.length() > 0) {
-                if (globalstate.current != globalstate.latest) {
-                    globalstate.latest->raw_content = globalstate.current->raw_content;
-                    entry = globalstate.current = globalstate.latest;
+            if (entry->m_RawContent.length() > 0) {
+                if (globalstate.m_Current != globalstate.m_Latest) {
+                    globalstate.m_Latest->m_RawContent = globalstate.m_Current->m_RawContent;
+                    entry = globalstate.m_Current = globalstate.m_Latest;
                 }
-                entry->raw_content.erase(globalstate.cursor_x - prefix_length(), 1);
+                entry->m_RawContent.erase(globalstate.m_CursorX - prefix_length(), 1);
             }
             break;
 
         default:
-            if (globalstate.current != globalstate.latest) {
-                globalstate.latest->raw_content = globalstate.current->raw_content;
-                entry = globalstate.current = globalstate.latest;
+            if (globalstate.m_Current != globalstate.m_Latest) {
+                globalstate.m_Latest->m_RawContent = globalstate.m_Current->m_RawContent;
+                entry = globalstate.m_Current = globalstate.m_Latest;
             }
-            if (globalstate.cursor_x < prefix_length() + entry->raw_content.length())
-                entry->raw_content.insert(globalstate.cursor_x - prefix_length(), 1, (char)input);
+            if (globalstate.m_CursorX < prefix_length() + entry->m_RawContent.length())
+                entry->m_RawContent.insert(globalstate.m_CursorX - prefix_length(), 1, (char)input);
             else
-                entry->raw_content.push_back((char)input);
-            globalstate.cursor_x++;
+                entry->m_RawContent.push_back((char)input);
+            globalstate.m_CursorX++;
     }
 
     return REDRAW;
@@ -126,10 +126,10 @@ int handle_input(Tools::Entry* entry, int input) {
 
 int main(int argc, char* argv[]) {
     // Load config if existent
-    globalconfig.load_config();
+    globalconfig.LoadConfig();
 
     // Init state
-    globalstate.init();
+    globalstate.Init();
 
     // Init curses
     initscr();
@@ -140,13 +140,13 @@ int main(int argc, char* argv[]) {
     // Init colors
     Tools::init_color_defs(globalconfig);
 
-    getmaxyx(stdscr, globalstate.max_y, globalstate.max_x);
+    getmaxyx(stdscr, globalstate.m_MaxY, globalstate.m_MaxX);
 
     print_footer();
 
     // Print title
     move(0, 0);
-    std::string show_version_setting = globalconfig.get_value("general.show_version");
+    std::string show_version_setting = globalconfig.GetValue("general.show_version");
     if (show_version_setting.empty() || show_version_setting == "true") {
         printw("Terminal Calculator %s\n", PROJECT_VER);
     } else {
@@ -155,38 +155,38 @@ int main(int argc, char* argv[]) {
 
     int result_input = REDRAW;
     int result_parse = -1;
-    getyx(stdscr, globalstate.cursor_y, globalstate.cursor_x);
+    getyx(stdscr, globalstate.m_CursorY, globalstate.m_CursorX);
     while (1) {
-        globalstate.cursor_x += prefix_length();
+        globalstate.m_CursorX += prefix_length();
 
         do {
             if (result_input == REDRAW) {
-                parse(*globalstate.current);
+                parse(*globalstate.m_Current);
 
-                move(globalstate.cursor_y, 0);
+                move(globalstate.m_CursorY, 0);
                 clrtoeol();
-                move(globalstate.cursor_y, 0);
+                move(globalstate.m_CursorY, 0);
                 print_prefix();
-                globalstate.current->print_stylized();
+                globalstate.m_Current->PrintStylized();
             }
-            move(globalstate.cursor_y, globalstate.cursor_x);
+            move(globalstate.m_CursorY, globalstate.m_CursorX);
             refresh();
 
-            result_input = handle_input(globalstate.current, getch());
+            result_input = handle_input(globalstate.m_Current, getch());
         } while (result_input > 0);
 
         // Final parse for var definitions etc.
-        result_parse = parse(*globalstate.current, 1);
+        result_parse = parse(*globalstate.m_Current, 1);
 
         if (result_parse == Commands::Exit || result_input == EXIT)
             break;
 
-        globalstate.cursor_y++;
-        globalstate.cursor_x = 0;
+        globalstate.m_CursorY++;
+        globalstate.m_CursorX = 0;
         result_input = REDRAW;
 
         // Create new entry in history
-        globalstate.create_new_entry();
+        globalstate.CreateNewEntry();
     }
 
     endwin();

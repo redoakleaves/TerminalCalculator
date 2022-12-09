@@ -51,7 +51,7 @@ TEST(FuncTest, HandleConstUsage) {
     Tools::Entry entry;
     std::string test_string;
 
-    globalstate.use_deg = 1;
+    globalstate.m_UseDeg = 1;
 
     test_string = "sin(90)";
     funcParser.ParseConstFuncUsage(entry, test_string);

@@ -17,10 +17,10 @@ namespace Tools
 
         std::string config_value;
 
-        config_value = config.get_value("colors.result");
+        config_value = config.GetValue("colors.result");
         init_pair(COLOR_RESULT, config_value.empty() ? COLOR_GREEN : std::stoi(config_value), -1);
 
-        config_value = config.get_value("colors.commmand");
+        config_value = config.GetValue("colors.commmand");
         init_pair(COLOR_COMMAND, config_value.empty() ? COLOR_YELLOW : std::stoi(config_value), -1);
     }
 }
