@@ -46,3 +46,4 @@ For more details head over to [configuration](doc/configuration.md).
 In the following you can find a set of features and points of interest for future development.
 
 - __Expand colorization__: Currently, `TerminalCalculator`'s colorization support is limited as the basic functionality of this calculator was prioritized over its styling during the development process.
+- __RPN mode/stack-based calculator__

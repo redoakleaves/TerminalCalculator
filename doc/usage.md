@@ -29,7 +29,7 @@ This behavior can be altered permanently by changing the configuration file (see
 `TerminalCalculator` supports defining custom functions.
 A definition may look as follows:
 ```
-f(x;y)=x^2+sqrt(y)
+f(x;y) = x^2+sqrt(y)
 ```
 
 Using variables or other functions inside a function definition is supported. Definitions may later be overwritten with a new definition.
