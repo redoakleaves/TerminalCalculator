@@ -5,69 +5,63 @@
 
 #include "tools/entry.h"
 #include "parser.h"
-#include "commands.h"
-#include "arithmetic.h"
-#include "func.h"
-#include "vars.h"
 
-static const re2::RE2 sub_expression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*\\/+-]+)\\)");
-static const re2::RE2 valid_result_expression("^-?\\d+(?:[\\.\\,]\\d+)?$");
+namespace Parser {
+    const re2::RE2 Parser::subExpression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*\\/+-]+)\\)");
+    const re2::RE2 Parser::validResultExpression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
-static Parser::CommandParser commandParser;
-static Parser::VarParser varParser;
-static Parser::FuncParser funcParser;
-static Parser::ArithmeticParser arithmeticParser;
+    int Parser::Parse(Tools::Entry& entry, int final) {
+        entry.SetStylized(entry.m_RawContent);
 
-int parse(Tools::Entry& entry, int final) {
-    entry.SetStylized(entry.m_RawContent);
+        // Create working copy of input and remove spaces
+        std::string workingCopy = entry.m_RawContent;
+        workingCopy.erase(std::remove_if(workingCopy.begin(), workingCopy.end(), ::isspace), workingCopy.end());
 
-    // Create working copy of input and remove spaces
-    std::string working_copy = entry.m_RawContent;
-    working_copy.erase(std::remove_if(working_copy.begin(), working_copy.end(), ::isspace), working_copy.end());
+        // Check for commands
+        int command = m_CommandParser.ParseSubstring(entry, workingCopy, final);
+        if (command)
+            return command;
 
-    // Check for commands
-    int command = commandParser.ParseSubstring(entry, working_copy, final);
-    if (command)
-        return command;
-
-    // Resolve function and variable definitions
-    if (working_copy.find('=') != std::string::npos) {
-        if (!funcParser.ParseFuncDefinition(entry, working_copy, final)) {
-            varParser.ParseVarDefinitions(entry, working_copy, final);
+        // Resolve function and variable definitions
+        if (workingCopy.find('=') != std::string::npos) {
+            int definitionResult = m_FuncParser.ParseFuncDefinition(entry, workingCopy, final);
+            if (!definitionResult)
+                definitionResult = m_VarParser.ParseVarDefinitions(entry, workingCopy, final);
+            return definitionResult ? 0 : -1;
         }
+
+        // Resolve function and variable usage
+        m_FuncParser.ParseFuncUsage(entry, workingCopy);
+        m_VarParser.ParseVarUsage(entry, workingCopy);
+
+        // Parse pre-defined functions, subexpressions, and arithmetic until nothing changes
+        int prevLength = 0;
+        do {
+            prevLength = workingCopy.length();
+            
+            m_ArithmeticParser.ParseArithmetic(entry, workingCopy);
+            
+            m_FuncParser.ParseConstFuncUsage(entry, workingCopy);
+
+            // Search for subexpressions
+            re2::StringPiece subexpression;
+            while (re2::RE2::PartialMatch(workingCopy, subExpression, &subexpression))
+            {
+                std::string subexpressionString = subexpression.ToString();
+                m_ArithmeticParser.ParseArithmetic(entry, subexpressionString);
+                subexpressionString.replace(subexpression.data() - workingCopy.data() - 1, subexpression.length() + 2, subexpressionString);
+            }
+        } while (prevLength != workingCopy.length());
+
+        // Check remaining string
+        if (re2::RE2::FullMatch(workingCopy, validResultExpression)) {
+            entry.SetResult(workingCopy);
+        } else {
+            std::string resultEmpty;
+            entry.SetResult(resultEmpty);
+            return -1;
+        }
+
         return 0;
     }
-
-    // Resolve function and variable usage
-    funcParser.ParseFuncUsage(entry, working_copy);
-    varParser.ParseVarUsage(entry, working_copy);
-
-    // Parse pre-defined functions, subexpressions, and algebra until nothing changes
-    int old_length = 0;
-    do {
-        old_length = working_copy.length();
-        
-        funcParser.ParseConstFuncUsage(entry, working_copy);
-
-        // Search for subexpressions
-        re2::StringPiece subexpression;
-        while (re2::RE2::PartialMatch(working_copy, sub_expression, &subexpression))
-        {
-            std::string subexpression_string = subexpression.ToString();
-            arithmeticParser.ParseArithmetic(entry, subexpression_string);
-            working_copy.replace(subexpression.data() - working_copy.data() - 1, subexpression.length() + 2, subexpression_string);
-        }
-
-        arithmeticParser.ParseArithmetic(entry, working_copy);
-    } while (old_length != working_copy.length());
-
-    // Check remaining string
-    if (re2::RE2::FullMatch(working_copy, valid_result_expression)) {
-        entry.SetResult(working_copy);
-    } else {
-        std::string result_empty;
-        entry.SetResult(result_empty);
-    }
-
-    return 0;
 }

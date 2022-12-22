@@ -153,6 +153,7 @@ int main(int argc, char* argv[]) {
         printw("Terminal Calculator\n");
     }
 
+    Parser::Parser parser;
     int result_input = REDRAW;
     int result_parse = -1;
     getyx(stdscr, globalstate.m_CursorY, globalstate.m_CursorX);
@@ -161,7 +162,7 @@ int main(int argc, char* argv[]) {
 
         do {
             if (result_input == REDRAW) {
-                parse(*globalstate.m_Current);
+                parser.Parse(*globalstate.m_Current);
 
                 move(globalstate.m_CursorY, 0);
                 clrtoeol();
@@ -176,7 +177,7 @@ int main(int argc, char* argv[]) {
         } while (result_input > 0);
 
         // Final parse for var definitions etc.
-        result_parse = parse(*globalstate.m_Current, 1);
+        result_parse = parser.Parse(*globalstate.m_Current, 1);
 
         if (result_parse == Commands::Exit || result_input == EXIT)
             break;
