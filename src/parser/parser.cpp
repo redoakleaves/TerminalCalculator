@@ -49,7 +49,7 @@ namespace Parser {
             {
                 std::string subexpressionString = subexpression.ToString();
                 m_ArithmeticParser.ParseArithmetic(entry, subexpressionString);
-                subexpressionString.replace(subexpression.data() - workingCopy.data() - 1, subexpression.length() + 2, subexpressionString);
+                workingCopy.replace(subexpression.data() - workingCopy.data() - 1, subexpression.length() + 2, subexpressionString);
             }
         } while (prevLength != workingCopy.length());
 
