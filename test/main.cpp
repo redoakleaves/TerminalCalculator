@@ -8,6 +8,8 @@
 #include "parser/func_test.hpp"
 #include "parser/vars_test.hpp"
 
+#include "parser/parser_test.hpp"
+
 Tools::Config globalconfig;
 Tools::State globalstate;
 
