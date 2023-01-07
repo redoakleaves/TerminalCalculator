@@ -41,6 +41,9 @@ A complete list of all supported features can be found in [usage](doc/usage.md).
 `TerminalCalculator`'s behavior and appearance can be configured using dedicated configuration files.
 For more details head over to [configuration](doc/configuration.md).
 
+## Known issues
+- `TerminalCalculator` behaves incorrectly when changing its window size.
+
 ## Future development
 `TerminalCalculator` is far from being complete.
 In the following you can find a set of features and points of interest for future development.
