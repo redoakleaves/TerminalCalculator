@@ -10,6 +10,8 @@ namespace Tools
         m_Current = m_History;
         m_Latest = m_History;
 
+        m_Window = nullptr;
+
         m_CursorX = 0;
         m_CursorY = 0;
 

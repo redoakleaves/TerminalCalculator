@@ -8,6 +8,7 @@
 #include <ncurses.h>
 #endif
 
+#include "global.h"
 #include "color.h"
 #include "entry.h"
 
@@ -47,15 +48,15 @@ namespace Tools
         int color = -1;
         char temp;
         while (std::getline(stream, token, '{')) {
-            printw("%s", token.c_str());
+            wprintw(globalstate.m_Window, "%s", token.c_str());
 
             if (color >= 0)
-                attroff(COLOR_PAIR(color));
+                wattroff(globalstate.m_Window, COLOR_PAIR(color));
 
             if (!stream.eof()) {
                 if (stream.peek() != '}') {
                     stream >> color;
-                    attron(COLOR_PAIR(color));
+                    wattron(globalstate.m_Window, COLOR_PAIR(color));
                 }
                 stream >> temp;
             }
@@ -65,10 +66,10 @@ namespace Tools
     }
     void Entry::PrintResult() {
         if (!m_Result.empty()) {
-            printw(" = ");
-            attron(COLOR_PAIR(COLOR_RESULT));
-            printw("%s", m_Result.c_str());
-            attroff(COLOR_PAIR(COLOR_RESULT));
+            wprintw(globalstate.m_Window, " = ");
+            wattron(globalstate.m_Window, COLOR_PAIR(COLOR_RESULT));
+            wprintw(globalstate.m_Window, "%s", m_Result.c_str());
+            wattroff(globalstate.m_Window, COLOR_PAIR(COLOR_RESULT));
         }
     }
 }

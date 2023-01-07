@@ -23,20 +23,28 @@
 Tools::Config globalconfig;
 Tools::State globalstate;
 
-int prefix_length() {
-    char buffer[10];
-    return snprintf(buffer, 10, "%u", globalstate.m_Latest->m_Identifier) + 2;
-}
-void print_prefix() {
-    printw("%u: ", globalstate.m_Latest->m_Identifier);
+int GetPrefixLength() {
+    return snprintf(nullptr, 0, "%u", globalstate.m_Latest->m_Identifier) + 2;
 }
 
-void print_footer() {
-    move(globalstate.m_MaxY - 1, 0);
+void PrintPrefix() {
+    wprintw(globalstate.m_Window, "%u: ", globalstate.m_Latest->m_Identifier);
+}
+void PrintTitle() {
+    move(0, 0);
+    std::string showVersionSetting = globalconfig.GetValue("general.show_version");
+    if (showVersionSetting.empty() || showVersionSetting == "true") {
+        printw("Terminal Calculator %s\n", PROJECT_VER);
+    } else {
+        printw("Terminal Calculator\n");
+    }
+}
+void PrintFooter() {
+    move(globalstate.m_ScreenMaxY - 1, 0);
     printw("UpArrow: Up in history DownArrow: Down in history");
 }
 
-int handle_input(Tools::Entry* entry, int input) {
+int HandleInput(Tools::Entry* entry, int input) {
     switch (input) {
         case -1:
             return NO_REDRAW;
@@ -54,19 +62,22 @@ int handle_input(Tools::Entry* entry, int input) {
 
         // Handle resize
         case KEY_RESIZE:
-            move(globalstate.m_MaxY - 1, 0);
+            move(globalstate.m_ScreenMaxY - 1, 0);
             clrtoeol();
-            getmaxyx(stdscr, globalstate.m_MaxY, globalstate.m_MaxX);
-            print_footer();
+            getmaxyx(stdscr, globalstate.m_ScreenMaxY, globalstate.m_ScreenMaxX);
+            PrintFooter();
+            wresize(globalstate.m_Window, globalstate.m_ScreenMaxY - 2, globalstate.m_ScreenMaxX);
+            getmaxyx(globalstate.m_Window, globalstate.m_WindowMaxY, globalstate.m_WindowMaxX);
+            refresh();
             return NO_REDRAW;
 
         // Move cursor left or right
         case KEY_LEFT:
-            if (globalstate.m_CursorX > prefix_length())
+            if (globalstate.m_CursorX > GetPrefixLength())
                 globalstate.m_CursorX--;
             return NO_REDRAW;
         case KEY_RIGHT:
-            if (globalstate.m_CursorX < prefix_length() + entry->m_RawContent.length())
+            if (globalstate.m_CursorX < GetPrefixLength() + entry->m_RawContent.length())
                 globalstate.m_CursorX++;
             return NO_REDRAW;
 
@@ -74,13 +85,13 @@ int handle_input(Tools::Entry* entry, int input) {
         case KEY_UP:
             if (globalstate.m_Current->m_Prev) {
                 globalstate.m_Current = globalstate.m_Current->m_Prev;
-                globalstate.m_CursorX = prefix_length() + globalstate.m_Current->m_RawContent.length();
+                globalstate.m_CursorX = GetPrefixLength() + globalstate.m_Current->m_RawContent.length();
             }
             break;
         case KEY_DOWN:
             if (globalstate.m_Current->m_Next) {
                 globalstate.m_Current = globalstate.m_Current->m_Next;
-                globalstate.m_CursorX = prefix_length() + globalstate.m_Current->m_RawContent.length();
+                globalstate.m_CursorX = GetPrefixLength() + globalstate.m_Current->m_RawContent.length();
             }
             break;
 
@@ -93,7 +104,7 @@ int handle_input(Tools::Entry* entry, int input) {
                     globalstate.m_Latest->m_RawContent = globalstate.m_Current->m_RawContent;
                     entry = globalstate.m_Current = globalstate.m_Latest;
                 }
-                entry->m_RawContent.erase(globalstate.m_CursorX - prefix_length() - 1, 1);
+                entry->m_RawContent.erase(globalstate.m_CursorX - GetPrefixLength() - 1, 1);
                 globalstate.m_CursorX--;
             }
             break;
@@ -105,7 +116,7 @@ int handle_input(Tools::Entry* entry, int input) {
                     globalstate.m_Latest->m_RawContent = globalstate.m_Current->m_RawContent;
                     entry = globalstate.m_Current = globalstate.m_Latest;
                 }
-                entry->m_RawContent.erase(globalstate.m_CursorX - prefix_length(), 1);
+                entry->m_RawContent.erase(globalstate.m_CursorX - GetPrefixLength(), 1);
             }
             break;
 
@@ -114,8 +125,8 @@ int handle_input(Tools::Entry* entry, int input) {
                 globalstate.m_Latest->m_RawContent = globalstate.m_Current->m_RawContent;
                 entry = globalstate.m_Current = globalstate.m_Latest;
             }
-            if (globalstate.m_CursorX < prefix_length() + entry->m_RawContent.length())
-                entry->m_RawContent.insert(globalstate.m_CursorX - prefix_length(), 1, (char)input);
+            if (globalstate.m_CursorX < GetPrefixLength() + entry->m_RawContent.length())
+                entry->m_RawContent.insert(globalstate.m_CursorX - GetPrefixLength(), 1, (char)input);
             else
                 entry->m_RawContent.push_back((char)input);
             globalstate.m_CursorX++;
@@ -133,58 +144,66 @@ int main(int argc, char* argv[]) {
 
     // Init curses
     initscr();
-    keypad(stdscr, TRUE);
     noecho();
     raw();
     
     // Init colors
     Tools::init_color_defs(globalconfig);
 
-    getmaxyx(stdscr, globalstate.m_MaxY, globalstate.m_MaxX);
+    getmaxyx(stdscr, globalstate.m_ScreenMaxY, globalstate.m_ScreenMaxX);
 
-    print_footer();
+    // Setup window
+    globalstate.m_Window = newwin(globalstate.m_ScreenMaxY - 2, globalstate.m_ScreenMaxX, 1, 0);
+    getmaxyx(globalstate.m_Window, globalstate.m_WindowMaxY, globalstate.m_WindowMaxX);
+    keypad(globalstate.m_Window, 1);
+    scrollok(globalstate.m_Window, 1);
+    
+    PrintTitle();
+    PrintFooter();
+    refresh();
 
-    // Print title
-    move(0, 0);
-    std::string show_version_setting = globalconfig.GetValue("general.show_version");
-    if (show_version_setting.empty() || show_version_setting == "true") {
-        printw("Terminal Calculator %s\n", PROJECT_VER);
-    } else {
-        printw("Terminal Calculator\n");
-    }
+    globalstate.m_CursorY = 0;
+    globalstate.m_CursorX = 0;
 
     Parser::Parser parser;
-    int result_input = REDRAW;
-    int result_parse = -1;
-    getyx(stdscr, globalstate.m_CursorY, globalstate.m_CursorX);
+    int resultInput = REDRAW;
+    int resultParse = -1;
     while (1) {
-        globalstate.m_CursorX += prefix_length();
+        globalstate.m_CursorX += GetPrefixLength();
+
+        if (globalstate.m_CursorY > globalstate.m_WindowMaxY - 1)
+            globalstate.m_CursorY = globalstate.m_WindowMaxY - 1;
 
         do {
-            if (result_input == REDRAW) {
+            if (resultInput == REDRAW) {
                 parser.Parse(*globalstate.m_Current);
 
-                move(globalstate.m_CursorY, 0);
-                clrtoeol();
-                move(globalstate.m_CursorY, 0);
-                print_prefix();
+                wmove(globalstate.m_Window, globalstate.m_CursorY, 0);
+                wclrtoeol(globalstate.m_Window);
+                wmove(globalstate.m_Window, globalstate.m_CursorY, 0);
+                PrintPrefix();
+
                 globalstate.m_Current->PrintStylized();
             }
-            move(globalstate.m_CursorY, globalstate.m_CursorX);
-            refresh();
+            wmove(globalstate.m_Window, globalstate.m_CursorY, globalstate.m_CursorX);
+            wrefresh(globalstate.m_Window);
 
-            result_input = handle_input(globalstate.m_Current, getch());
-        } while (result_input > 0);
+            resultInput = HandleInput(globalstate.m_Current, wgetch(globalstate.m_Window));
+        } while (resultInput > 0);
 
         // Final parse for var definitions etc.
-        result_parse = parser.Parse(*globalstate.m_Current, 1);
+        resultParse = parser.Parse(*globalstate.m_Current, 1);
 
-        if (result_parse == Commands::Exit || result_input == EXIT)
+        if (resultParse == Commands::Exit || resultInput == EXIT)
             break;
+
+        // Add newline to the end of every line
+        wmove(globalstate.m_Window, globalstate.m_CursorY, globalstate.m_CursorX + globalstate.m_Current->GetResult().length() + 3);
+        waddch(globalstate.m_Window, '\n');
 
         globalstate.m_CursorY++;
         globalstate.m_CursorX = 0;
-        result_input = REDRAW;
+        resultInput = REDRAW;
 
         // Create new entry in history
         globalstate.CreateNewEntry();
