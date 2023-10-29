@@ -65,9 +65,9 @@ TEST(VarTest, HandleVarUsage) {
     std::string test_string;
 
     test_string = "A=2";
-    varParser.ParseVarDefinitions(entry, test_string, 1);
+    EXPECT_EQ(varParser.ParseVarDefinitions(entry, test_string, 1), 1);
     test_string = "B=5";
-    varParser.ParseVarDefinitions(entry, test_string, 1);
+    EXPECT_EQ(varParser.ParseVarDefinitions(entry, test_string, 1), 1);
 
     test_string = "A+4";
     varParser.ParseVarUsage(entry, test_string);
