@@ -14,7 +14,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # macos-latest disabled due to cmake deprecation
+        os: [ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
 
