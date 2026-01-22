@@ -22,7 +22,7 @@ public:
      *
      * @return 1 on success, 0 otherwise.
     */
-    bool ParseFuncDefinition(const std::string& substring, bool final = false);
+    [[nodiscard]] bool ParseFuncDefinition(const std::string& substring, bool final = false);
     /**
      * @brief Searches for and resolves usage of user-defined functions within a substring.
      *

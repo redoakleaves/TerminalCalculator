@@ -16,7 +16,7 @@ public:
      *
      * @return 1 on success, 0 otherwise.
     */
-    bool ParseVarDefinitions(const std::string& substring, bool final = false);
+    [[nodiscard]] bool ParseVarDefinitions(const std::string& substring, bool final = false);
     /**
      * @brief Searches for variable usage within a substring.
      *

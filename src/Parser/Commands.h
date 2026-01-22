@@ -26,7 +26,7 @@ public:
      *
      * @return Returns optional containing the command enum if found.
     */
-    static std::optional<Command> ParseSubstring(Tools::Entry& entry, const std::string& substring, bool final = false);
+    [[nodiscard]] static std::optional<Command> ParseSubstring(Tools::Entry& entry, const std::string& substring, bool final = false);
 };
 
 }

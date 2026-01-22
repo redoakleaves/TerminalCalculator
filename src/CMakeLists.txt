@@ -2,6 +2,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tools/config.h.in tools/config.h)
 
 add_library(TerminalCalculatorLibrary)
 
+target_compile_options(TerminalCalculatorLibrary PRIVATE -Wall -Wextra -Wpedantic -Werror)
+
 target_link_libraries(TerminalCalculatorLibrary re2)
 target_link_libraries(TerminalCalculatorLibrary yaml-cpp)
 if (UNIX)

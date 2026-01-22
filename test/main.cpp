@@ -10,8 +10,8 @@
 
 #include <gtest/gtest.h>
 
-static Tools::Config globalconfig;
-static Tools::State globalstate;
+Tools::Config globalconfig;
+Tools::State globalstate;
 
 int main(int argc, char **argv) {
     // Init state
