@@ -1,17 +1,17 @@
-#include <gtest/gtest.h>
-
 #include "tools/config.h"
 #include "tools/state.h"
 
-#include "parser/arithmetic_test.hpp"
-#include "parser/commands_test.hpp"
-#include "parser/func_test.hpp"
-#include "parser/vars_test.hpp"
+#include "Parser/ArithmeticTest.hpp"
+#include "Parser/CommandsTest.hpp"
+#include "Parser/FuncTest.hpp"
+#include "Parser/VarsTest.hpp"
 
-#include "parser/parser_test.hpp"
+#include "Parser/ParserTest.hpp"
 
-Tools::Config globalconfig;
-Tools::State globalstate;
+#include <gtest/gtest.h>
+
+static Tools::Config globalconfig;
+static Tools::State globalstate;
 
 int main(int argc, char **argv) {
     // Init state

@@ -13,8 +13,8 @@
 #include "tools/config.h"
 #include "tools/state.h"
 
-#include "parser/parser.h"
-#include "parser/commands.h"
+#include "Parser/Commands.h"
+#include "Parser/Parser.h"
 
 #define EXIT -1
 #define REDRAW 1
@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
     initscr();
     noecho();
     raw();
-    
+
     // Init colors
     Tools::init_color_defs(globalconfig);
 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
     getmaxyx(globalstate.m_Window, globalstate.m_WindowMaxY, globalstate.m_WindowMaxX);
     keypad(globalstate.m_Window, 1);
     scrollok(globalstate.m_Window, 1);
-    
+
     PrintTitle();
     PrintFooter();
     refresh();
@@ -194,8 +194,9 @@ int main(int argc, char* argv[]) {
         // Final parse for var definitions etc.
         resultParse = parser.Parse(*globalstate.m_Current, 1);
 
-        if (resultParse == Commands::Exit || resultInput == EXIT)
+        if (resultParse == Parser::Command::Exit || resultInput == EXIT) {
             break;
+        }
 
         // Add newline to the end of every line
         wmove(globalstate.m_Window, globalstate.m_CursorY, globalstate.m_CursorX + globalstate.m_Current->GetResult().length() + 3);

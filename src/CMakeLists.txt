@@ -26,11 +26,11 @@ target_sources(TerminalCalculatorLibrary
         tools/entry.cpp
         tools/state.cpp
 
-        parser/parser.cpp
-        parser/commands.cpp
-        parser/arithmetic.cpp
-        parser/vars.cpp
-        parser/func.cpp
+        Parser/Arithmetic.cpp
+        Parser/Commands.cpp
+        Parser/Func.cpp
+        Parser/Parser.cpp
+        Parser/Vars.cpp
 )
 
 add_executable(TerminalCalculator main.cpp)

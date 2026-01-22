@@ -1,10 +1,9 @@
-#ifndef _PARSER_TEST_H_
-#define _PARSER_TEST_H_
+#pragma once
+
+#include "Parser/Parser.h"
+#include "tools/entry.h"
 
 #include <gtest/gtest.h>
-
-#include "tools/entry.h"
-#include "parser/parser.h"
 
 static Parser::Parser parser;
 
@@ -58,5 +57,3 @@ TEST(ParserTests, HandleInvalidInput) {
     EXPECT_EQ(parser.Parse(entry), -1);
     EXPECT_EQ(entry.GetResult(), "");
 }
-
-#endif
