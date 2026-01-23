@@ -39,3 +39,7 @@ target_sources(TerminalCalculatorLibrary
 
 add_executable(TerminalCalculator main.cpp)
 target_link_libraries(TerminalCalculator TerminalCalculatorLibrary)
+set_target_properties(TerminalCalculator
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
