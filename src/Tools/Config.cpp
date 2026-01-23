@@ -10,9 +10,9 @@
 #include <string>
 
 #if defined(_WIN32)
-static const std::array<const char*, 2> kConfigPaths = { "\\.tcconfig", "\\.config\\tc\\config.yml" };
+static const std::array<const char*, 2> kConfigPaths = { ".tcconfig", ".config\\tc\\config.yml" };
 #else
-static const std::array<const char*, 2> kConfigPaths = { "/.tcconfig", "/.config/tc/config.yml" };
+static const std::array<const char*, 2> kConfigPaths = { ".tcconfig", ".config/tc/config.yml" };
 #endif
 
 namespace Tools {
@@ -27,7 +27,7 @@ Config::Config() {
     char homepath[40];
     getenv_s(&len, homepath, 40, "HOMEPATH");
 
-    homePath_m = std::filesystem::path(std::format("{}\\{}", homedrive, homepath));
+    homePath_m = std::filesystem::path(std::format("{}{}", homedrive, homepath));
 #else
     homePath_m = std::filesystem::path(getenv("HOME"));
 #endif
