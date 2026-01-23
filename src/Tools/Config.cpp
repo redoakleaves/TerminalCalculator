@@ -42,8 +42,7 @@ void Config::LoadConfig() {
                 for (YAML::const_iterator it = config.begin(); it != config.end(); ++it) {
                     ParseRecursive(it->first.as<std::string>(), it->second);
                 }
-            }
-            catch (YAML::Exception e) { return; }
+            } catch (const YAML::Exception& e) { return; }
         }
     }
 }
