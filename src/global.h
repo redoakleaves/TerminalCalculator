@@ -1,10 +1,7 @@
-#ifndef _GLOBAL_H_
-#define _GLOBAL_H_
+#pragma once
 
-#include "tools/config.h"
-#include "tools/state.h"
+#include "Tools/Config.h"
+#include "Tools/State.h"
 
-extern Tools::Config globalconfig;
-extern Tools::State globalstate;
-
-#endif
+extern Tools::Config globalConfig;
+extern Tools::State globalState;

@@ -1,5 +1,5 @@
-#include "tools/config.h"
-#include "tools/state.h"
+#include "Tools/Config.h"
+#include "Tools/State.h"
 
 #include "Parser/ArithmeticTest.hpp"
 #include "Parser/CommandsTest.hpp"
@@ -10,12 +10,12 @@
 
 #include <gtest/gtest.h>
 
-Tools::Config globalconfig;
-Tools::State globalstate;
+Tools::Config globalConfig;
+Tools::State globalState;
 
 int main(int argc, char **argv) {
     // Init state
-    globalstate.Init();
+    globalState.Init();
 
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

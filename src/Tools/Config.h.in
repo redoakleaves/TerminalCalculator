@@ -1,0 +1,33 @@
+#pragma once
+
+#include <filesystem>
+#include <string_view>
+#include <string>
+#include <unordered_map>
+
+// Forward declarations
+namespace YAML {
+    class Node;
+}
+
+#define PROJECT_VER "@PROJECT_VERSION@"
+
+namespace Tools {
+
+class Config {
+public:
+    Config();
+
+    void LoadConfig();
+
+    std::string GetValue(std::string_view key) const;
+
+private:
+    std::filesystem::path homePath_m;
+
+    std::unordered_map<std::string, std::string> configStore_m;
+
+    void ParseRecursive(const std::string& prefix, const YAML::Node& child);
+};
+
+}

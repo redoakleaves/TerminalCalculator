@@ -1,7 +1,7 @@
 #include "Commands.h"
 #include "global.h"
-#include "tools/color.h"
-#include "tools/entry.h"
+#include "Tools/Color.h"
+#include "Tools/Entry.h"
 
 #include <re2/re2.h>
 
@@ -36,12 +36,12 @@ std::optional<Command> CommandParser::ParseSubstring(Tools::Entry& entry, const 
         // Degree/Radian switching
         else if (commandString == "deg") {
             if (final) {
-                globalstate.m_UseDeg = 1;
+                globalState.useDeg_m = true;
             }
             commandValue = Command::NoAction;
         } else if (commandString == "rad") {
             if (final) {
-                globalstate.m_UseDeg = 0;
+                globalState.useDeg_m = false;
             }
             commandValue = Command::NoAction;
         // Invalid command
@@ -51,7 +51,7 @@ std::optional<Command> CommandParser::ParseSubstring(Tools::Entry& entry, const 
 
         // Colorize command in entry
         std::stringstream stream;
-        stream << '{' << COLOR_COMMAND << '}';
+        stream << '{' << Tools::ColorType::Command << '}';
         stream << ':' << commandCopy;
         std::string stylized = stream.str();
         entry.SetStylized(stylized);

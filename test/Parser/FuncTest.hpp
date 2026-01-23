@@ -48,7 +48,7 @@ TEST(FuncTest, HandleConstOverride) {
 TEST(FuncTest, HandleConstUsage) {
     std::string testString;
 
-    globalstate.m_UseDeg = 1;
+    globalState.useDeg_m = true;
 
     testString = "sin(90)";
     funcParser.ParseConstFuncUsage(testString);

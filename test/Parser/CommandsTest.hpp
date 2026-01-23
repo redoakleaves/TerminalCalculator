@@ -2,9 +2,9 @@
 
 #include "global.h"
 #include "Parser/Commands.h"
-#include "tools/config.h"
-#include "tools/entry.h"
-#include "tools/state.h"
+#include "Tools/Config.h"
+#include "Tools/Entry.h"
+#include "Tools/State.h"
 
 #include <gtest/gtest.h>
 
@@ -21,18 +21,18 @@ TEST(CommandsTest, ExistentCommand) {
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, true), Parser::Command::Exit);
 
     testString = ":deg";
-    globalstate.m_UseDeg = 0;
+    globalState.useDeg_m = false;
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, false), Parser::Command::NoAction);
-    EXPECT_EQ(globalstate.m_UseDeg, 0);
+    EXPECT_EQ(globalState.useDeg_m, false);
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, true), Parser::Command::NoAction);
-    EXPECT_EQ(globalstate.m_UseDeg, 1);
+    EXPECT_EQ(globalState.useDeg_m, true);
 
     testString = ":rad";
-    globalstate.m_UseDeg = 1;
+    globalState.useDeg_m = true;
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, false), Parser::Command::NoAction);
-    EXPECT_EQ(globalstate.m_UseDeg, 1);
+    EXPECT_EQ(globalState.useDeg_m, true);
     EXPECT_EQ(commandParser.ParseSubstring(entry, testString, true), Parser::Command::NoAction);
-    EXPECT_EQ(globalstate.m_UseDeg, 0);
+    EXPECT_EQ(globalState.useDeg_m, false);
 }
 
 TEST(CommandsTest, InvalidCommand) {

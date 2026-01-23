@@ -1,4 +1,4 @@
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tools/config.h.in tools/config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Config.h.in Tools/Config.h)
 
 add_library(TerminalCalculatorLibrary)
 
@@ -23,16 +23,16 @@ target_include_directories(TerminalCalculatorLibrary
 
 target_sources(TerminalCalculatorLibrary
     PUBLIC
-        tools/color.cpp
-        tools/config.cpp
-        tools/entry.cpp
-        tools/state.cpp
+    Parser/Arithmetic.cpp
+    Parser/Commands.cpp
+    Parser/Func.cpp
+    Parser/Parser.cpp
+    Parser/Vars.cpp
 
-        Parser/Arithmetic.cpp
-        Parser/Commands.cpp
-        Parser/Func.cpp
-        Parser/Parser.cpp
-        Parser/Vars.cpp
+    Tools/Color.cpp
+    Tools/Config.cpp
+    Tools/Entry.cpp
+    Tools/State.cpp
 )
 
 add_executable(TerminalCalculator main.cpp)

@@ -154,7 +154,7 @@ void FuncParser::ParseConstFuncUsage(std::string& substring) const {
 
         // Convert first param to radians if necessary
         if (std::find(kTrigonometricFuncList.begin(), kTrigonometricFuncList.end(), funcNameString) != kTrigonometricFuncList.end()) {
-            if (globalstate.m_UseDeg) {
+            if (globalState.useDeg_m) {
                 paramList[0] *= std::numbers::pi / 180.0;
             }
         }

@@ -1,7 +1,7 @@
 #include "Parser.h"
 #include "Arithmetic.h"
 #include "Commands.h"
-#include "tools/entry.h"
+#include "Tools/Entry.h"
 
 #include <re2/re2.h>
 
@@ -15,10 +15,10 @@ static const re2::RE2 kSubExpression("(?:^|[^a-zA-Z\\d.,])\\(([a-zA-Z\\d.,\\^\\*
 static const re2::RE2 kValidResultExpression("^-?\\d+(?:[\\.\\,]\\d+)?$");
 
 int Parser::Parse(Tools::Entry& entry, bool final) {
-    entry.SetStylized(entry.m_RawContent);
+    entry.SetStylized(entry.rawContent_m);
 
     // Create working copy of input and remove spaces
-    std::string workingCopy = entry.m_RawContent;
+    std::string workingCopy = entry.rawContent_m;
     workingCopy.erase(std::remove_if(workingCopy.begin(), workingCopy.end(), ::isspace), workingCopy.end());
 
     // Check for commands
