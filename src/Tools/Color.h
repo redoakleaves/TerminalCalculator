@@ -8,8 +8,8 @@ namespace Tools {
 namespace Tools {
 
 enum ColorType : short {
-    Result = 0,
-    Command = 1
+    Result = 1,
+    Command = 2
 };
 
 class Color {

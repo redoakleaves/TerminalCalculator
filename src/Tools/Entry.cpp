@@ -42,8 +42,9 @@ void Entry::PrintStylized() const {
     while (std::getline(stream, token, '{')) {
         wprintw(globalState.window_mp, "%s", token.c_str());
 
-        if (color >= 0)
+        if (color >= 0) {
             wattroff(globalState.window_mp, COLOR_PAIR(color));
+        }
 
         if (!stream.eof()) {
             if (stream.peek() != '}') {
