@@ -32,7 +32,7 @@ cmake [-G generator] ..
 Choosing a specific generator is optional.
 
 Finally, execute the build command associated with the generator you chose earlier.
-The `TerminalCalculator` binary can be found inside the `src` subfolder within the build-folder.
+The `TerminalCalculator` binary can then be found inside the `bin` subfolder within the build-folder.
 
 ## Usage
 A complete list of all supported features can be found in [usage](doc/usage.md).
