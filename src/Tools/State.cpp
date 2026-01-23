@@ -32,10 +32,10 @@ void State::CreateNewEntry() {
     JumpToLatestEntry();
 }
 
-Entry& State::GetActiveEntry() const {
+Entry& State::GetActiveEntry() {
     return *activeEntry_m;
 }
-Entry& State::GetLatestEntry() const {
+Entry& State::GetLatestEntry() {
     return history_m.back();
 }
 

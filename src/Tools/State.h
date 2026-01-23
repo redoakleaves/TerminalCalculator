@@ -35,8 +35,8 @@ public:
     void Init();
 
     void CreateNewEntry();
-    Entry& GetActiveEntry() const;
-    Entry& GetLatestEntry() const;
+    Entry& GetActiveEntry();
+    Entry& GetLatestEntry();
     void JumpToLatestEntry();
 };
 

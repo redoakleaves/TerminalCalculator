@@ -177,8 +177,9 @@ int main(int argc, char* argv[]) {
     while (1) {
         globalState.cursorX_m += GetPrefixLength();
 
-        if (globalState.cursorY_m > globalState.windowMaxY_m - 1)
+        if (globalState.cursorY_m > globalState.windowMaxY_m - 1) {
             globalState.cursorY_m = globalState.windowMaxY_m - 1;
+        }
 
         do {
             if (resultInput == REDRAW) {
