@@ -53,8 +53,7 @@ std::optional<Command> CommandParser::ParseSubstring(Tools::Entry& entry, const 
         std::stringstream stream;
         stream << '{' << Tools::ColorType::Command << '}';
         stream << ':' << commandCopy;
-        std::string stylized = stream.str();
-        entry.SetStylized(stylized);
+        entry.SetStylized(stream.str());
     }
 
     return commandValue;

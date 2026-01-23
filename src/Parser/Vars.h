@@ -10,7 +10,6 @@ public:
     /**
      * @brief Searches for variable definition in substring. A valid definition is only stored during the final pass.
      *
-     * @param entry Reference to the current entry.
      * @param substring Reference to the substring.
      * @param final Boolean signaling final pass.
      *
@@ -20,7 +19,6 @@ public:
     /**
      * @brief Searches for variable usage within a substring.
      *
-     * @param entry Reference to the current entry.
      * @param substring Reference to the substring.
     */
     void ParseVarUsage(std::string& substring) const;
